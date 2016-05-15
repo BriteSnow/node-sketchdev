@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<!-- <link rel="stylesheet" type="text/css" href="icons.css"> -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+		<script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+		<style>
+		/* --------- Just for demo page --------- */
+		body{
+			max-width: 632px;
+			margin: 0 auto;
+		}
+		.icon-card{
+			width: 92px;
+			height: 64px;
+			float: left;
+			text-align: center;
+			border: solid 1px #eee;
+			padding-top: 8px;
+		}
+		.icon-card label{
+			display: block;
+			text-align: center;
+			font-size: 11px;
+		}
+		/* --------- /Just for demo page --------- */
+
+		/* In app code, you might want to have a class looking like this. 
+			 Note that the svg will stretch to the size of this div */
+		.icon{
+			display: inline-block;
+			width: 32px;
+			height: 32px;
+			margin: 0 8px;
+		}
+
+		.icon.big{
+			width: 64px;
+			height: 64px;
+		}
+
+		/* symbols has been stripped of their "fill" attribute (to workaround chrome bug on styling external svg)
+		   so, now you can simply style them the way you want.
+		*/
+		.icon:hover{
+			fill: red;
+		}
+
+		</style>
+		
+		<script>
+		// find the "spriteName" from the URL
+		var fileName = window.location.pathname.split("/").slice(-1)[0];		
+		var spriteName = fileName.replace("-demo.html","");
+		
+		// Best practice: This is a handlebars helper that can be used/customized
+		//                when developing application.
+		//                For more flexibility, this helper just focuses on the symbol part,
+		// 								letting the application code handling the icon semantic.
+		Handlebars.registerHelper('symbol', function(name, options) {
+			// Note: here we assume the viebox is squared and fixed. 
+			//       If this is not a fair assumption, this helper will have to get the meta information
+			//       from the symbols data (.json).
+			var html = ['<svg viewBox="0 0 24 24">'];
+			html.push('<use xlink:href="' + spriteName + '.svg#' + name + '"></use>');
+			html.push('</svg>');
+			return html.join('\n');
+		});
+
+		$(document).ready(function(){
+			// simple handlebars template to display all of the cions.
+			var source   = $("#icons-view").html();
+			var template = Handlebars.compile(source);
+
+			// get the sprite json (by default, same file path/name minus -demo.html and with .json)
+			var jsonPath = spriteName + ".json";
+			
+			$.get({url: jsonPath, dataType: "json"}).always(function(data){
+				$("#icon-ctn").html(template(data));				
+			});		
+		});
+		</script>
+	</head>	
+
+	<body>
+		<h1>Icons</h1>
+		<div id="icon-ctn">
+
+		</div>
+
+		<!-- handlebars template -->
+		<script id="icons-view" type="text/html">
+			{{#each symbols}}
+			<div class="icon-card">
+				<div class="icon">{{{symbol name}}}</div>
+				<label>{{name}}</label>
+			</div>
+			{{/each}}
+		</script>
+	</body>
+</html>

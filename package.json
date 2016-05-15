@@ -1,0 +1,30 @@
+{
+  "name": "sketchdev",
+  "version": "0.1.0",
+  "description": "Sketchapp utilities to streamline designer/developer workflow (using sketchapp tool chain).",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/BriteSnow/node-sketchdev.git"
+  },
+  "keyword": [
+    "sketchapp",
+    "sketch",
+    "svg",
+    "symbols",
+    "sprite"
+  ],
+  "dependencies": {
+    "async6": "^0.1.2",
+    "cheerio": "^0.20.0",
+    "fs-extra": "^0.30.0",
+    "glob": "^7.0.3",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {},
+  "author": "Jeremy Chone <jeremy.chone@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BriteSnow/node-sketchdev/issues"
+  }
+}
