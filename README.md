@@ -2,7 +2,7 @@
 
 Experimental node module that uses sketchapp tool chain to streamline designer/developer workflow. The first functionality is outputing Sketch App icon/symbols into SVG symbol sprite to be reused in application code. 
 
-Status: **Experimenal**
+Status: **Experimenal** APIs will probably change. 
 
 ## Usuage
 
@@ -10,6 +10,9 @@ Status: **Experimenal**
 const sketchdev = require("sketchdev");
 
 var sketch_file = "./myapp-spec.sketch";
+
+// create a JS object that will represent this sketch document
+var sketchDoc = sketchdev(sketch_file); 
 
 var distSvg = "./dist/svg"; // directory where all individual svg arboard will be exported
 
