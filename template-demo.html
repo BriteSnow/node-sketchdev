@@ -75,7 +75,7 @@
 			var template = Handlebars.compile(source);
 
 			// get the sprite json (by default, same file path/name minus -demo.html and with .json)
-			var jsonPath = spriteName + ".json";
+			var jsonPath = spriteName + ".data";
 			
 			$.get({url: jsonPath, dataType: "json"}).always(function(data){
 				$("#icon-ctn").html(template(data));				

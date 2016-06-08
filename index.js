@@ -184,7 +184,7 @@ function* sprite(svgDir, opts){
 	// write the sprite json
 	var outInfo = path.parse(opts.out);
 	var jsonStr = JSON.stringify({symbols: symbols}, null, 2);
-	var jsonPath = path.join(outInfo.dir, outInfo.name + ".json");
+	var jsonPath = path.join(outInfo.dir, outInfo.name + ".data");
 	fs.writeFileSync(jsonPath, jsonStr);
 
 	// copy the template file
