@@ -1,6 +1,6 @@
 {
   "name": "sketchdev",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Sketchapp utilities to streamline designer/developer workflow (using sketchapp tool chain).",
   "main": "index.js",
   "repository": {
