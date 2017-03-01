@@ -68,8 +68,8 @@ function* artboards(file, opts){
 function* exportFn(file, opts){
 	
 	var args = ['--include-symbols=YES', 
-				'--format=svg',
-				'--include-namespaces=NO'];
+		'--format=svg',
+		'--include-namespaces=NO'];
 
 	// what take precedence is the opts.items
 	var items = opts.items;
@@ -176,13 +176,18 @@ function* sprite(svgDir, opts){
 
 	content.push('</svg>');
 
+	
+	var outInfo = path.parse(opts.out);
+
+	// create the sprite folder
+	fs.mkdirsSync(outInfo.dir);
+
 	// write the sprite svg
 	var contentStr = content.join("\n");
-	console.log('will write in', opts.out);
+	console.log('will write sprite to:', opts.out);	
 	fs.writeFileSync(opts.out, contentStr);
 	
-	// write the sprite json
-	var outInfo = path.parse(opts.out);
+	// write the sprite json	
 	var jsonStr = JSON.stringify({symbols: symbols}, null, 2);
 	var jsonPath = path.join(outInfo.dir, outInfo.name + ".data");
 	fs.writeFileSync(jsonPath, jsonStr);
