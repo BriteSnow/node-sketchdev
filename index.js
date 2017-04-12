@@ -37,10 +37,15 @@ class Sketch{
 // opts.pageName:  (optional) String or regex matching the page.name
 // opts.name: (optional) String or regex matching the artboard.name
 function* artboards(file, opts){
+	// for sketch <= 42
+	// var docStr = yield exec(tool_path, ['--include-symbols=YES','--include-namespaces=YES', 'list', 'artboards', file]);
+
 	// list the artboards and parse the result into a doc
-	var docStr = yield exec(tool_path, ['--include-symbols=YES','--include-namespaces=YES', 'list', 'artboards', file]);
+	var cmdArgs = ['--include-symbols=YES', 'list', 'artboards', file];
+
+	var docStr = yield exec(tool_path, cmdArgs);
 	var doc = JSON.parse(docStr);
-	
+
 	// todo: use opts.pageName to match the pages we want.
 	var pages = doc.pages.filter(p => true);
 
@@ -50,6 +55,7 @@ function* artboards(file, opts){
 	for (let page of pages){
 		for (let board of page.artboards){
 			// todo: match with opts.pageName
+
 			if (match(matchArtboardName, board.name)){
 				artboards.push(board);
 			}
@@ -67,6 +73,7 @@ function* artboards(file, opts){
 // opts.sprite: (optional) path of the svg sprite (with <symbol> tags of all of the files)
 function* exportFn(file, opts){
 	
+	// sketch <= 42
 	var args = ['--include-symbols=YES', 
 		'--format=svg',
 		'--include-namespaces=NO'];
@@ -99,10 +106,15 @@ function* exportFn(file, opts){
 				.then(output => ({success: true, output: output}))
 				.catch(ex => ({sucess: false, error: ex}));
 
+	// Workaround: Need to skeep a beat to make sure the exported files can be found (putting 1 is too low?)
+	// Note: Not sure why we do not see the files immediately, as the above exec should yield when completed. 
+	yield wait(500);
+
 	// if we have the opts.flatten attribute, we need to move the _tmp/**.svg to the opts.out dir
 	// and flatten the name
 	if (opts.flatten){
 		var svgFiles = yield g(out + "**/*.svg");
+
 		svgFiles.forEach(file => {
 			// replace the folder path by '-'
 			var name = file.substring(out.length).replace(/\//gi,opts.flatten);
@@ -237,5 +249,13 @@ function match(nameOrRgx, value){
 	}
 	// assume it is a regex
 	return value.match(nameOrRgx);
+}
+
+function wait(ms){
+	return new Promise(function(resolve, reject){
+		setTimeout(function(){
+			resolve();
+		}, ms);
+	});
 }
 // --------- /Utilities --------- //
