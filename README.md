@@ -14,13 +14,15 @@ var sketch_file = "./myapp-spec.sketch";
 // create a JS object that will represent this sketch document
 var sketchDoc = sketchdev(sketch_file); 
 
-var distSvg = "./dist/svg"; // directory where all individual svg arboard will be exported
+var dist = "./dist/"
+var distSvg = dist + "svg/"; 
+var distSpriteFile = dist + "sprite/sprite.svg"; 
 
 // return a promise
 return sketchDoc.export({out: distSvg, 
         artboardName: /^ico\/[\w-]*\/\d*$/, // the regex matching artboard that should be exported
         flatten: '-', // if artboards contain '/' it will be stored in the corresponding folder sturucture, "flatten" just flatten the stucture with a a given char that will replace the '/'
-        sprite: distSprite + "sprite.svg" // output all svg as symbols in a sprite.svg and generage a sprite-demo.html page as well
+        sprite: distSpriteFile // output all svg as symbols in a sprite.svg and generage a sprite-demo.html page as well
         });
 
 ```
