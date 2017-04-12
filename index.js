@@ -108,7 +108,7 @@ function* exportFn(file, opts){
 
 	// Workaround: Need to skeep a beat to make sure the exported files can be found (putting 1 is too low?)
 	// Note: Not sure why we do not see the files immediately, as the above exec should yield when completed. 
-	yield wait(500);
+	yield wait(1500);
 
 	// if we have the opts.flatten attribute, we need to move the _tmp/**.svg to the opts.out dir
 	// and flatten the name
