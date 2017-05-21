@@ -1,6 +1,6 @@
 {
   "name": "sketchdev",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "Sketchapp utilities to streamline designer/developer workflow (using sketchapp tool chain).",
   "main": "index.js",
   "repository": {
@@ -15,13 +15,14 @@
     "sprite"
   ],
   "dependencies": {
-    "async6": "^0.1.2",
-    "cheerio": "^0.20.0",
-    "fs-extra": "^0.30.0",
-    "glob": "^7.0.3",
-    "path": "^0.12.7"
+    "cheerio": "^0.22.0",
+    "fs-extra-plus": "^0.1.0",
+    "p-spawn": "^0.2.0"
   },
   "devDependencies": {},
+  "engines": {
+    "node": ">=7.10.0"
+  },
   "author": "Jeremy Chone <jeremy.chone@gmail.com>",
   "license": "MIT",
   "bugs": {
