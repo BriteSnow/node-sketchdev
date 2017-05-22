@@ -6,7 +6,25 @@ Status: **Experimetal** APIs will probably change.
 
 Note: Version >= 0.2.0 requires native async/await support, so, node.js >= 7.10
 
-## Usuage
+## Usage
+
+
+
+#### .exportIcons
+
+Simpler, exporting icons following the `ico/.../dd` format (see [test/samples/sample-sketch.sketch])
+
+```js
+const sketchdev = require("sketchdev");
+
+var sketch_file = "./myapp-spec.sketch";
+sketchdev(file).exportIcons("./dist");
+```
+
+
+#### .export
+
+Used by exportIcons (with the above default)
 
 ```js
 const sketchdev = require("sketchdev");
