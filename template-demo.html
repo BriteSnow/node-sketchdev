@@ -4,7 +4,7 @@
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<!-- <link rel="stylesheet" type="text/css" href="icons.css"> -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js"></script>
 		<script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
 		<style>
 		/* --------- Just for demo page --------- */
@@ -29,6 +29,12 @@
 
 		/* In app code, you might want to have a class looking like this. 
 			 Note that the svg will stretch to the size of this div */
+		svg.svg-ico{
+			width: 100%;
+			height: 100%;
+		}
+
+		/* This is the div container for all icons. This guarantees that we can use the full DOM layout (e.g., flexbox) without worrying svg support.*/
 		.icon{
 			display: inline-block;
 			width: 32px;
@@ -63,30 +69,62 @@
 			// Note: here we assume the viebox is squared and fixed. 
 			//       If this is not a fair assumption, this helper will have to get the meta information
 			//       from the symbols data (.json).
-			var html = ['<svg viewBox="0 0 24 24">'];
-			html.push('<use xlink:href="' + spriteName + '.svg#' + name + '"></use>');
+			//var html = ['<svg class="svg-ico"  viewBox="0 0 24 24">'];
+			var html = ['<svg class="svg-ico">'];
+			html.push('<use xlink:href="#' + name + '"></use>');
 			html.push('</svg>');
 			return html.join('\n');
 		});
 
-		$(document).ready(function(){
-			// simple handlebars template to display all of the cions.
-			var source   = $("#icons-view").html();
-			var template = Handlebars.compile(source);
 
-			// get the sprite json (by default, same file path/name minus -demo.html and with .json)
-			var jsonPath = spriteName + ".data";
-			
-			$.get({url: jsonPath, dataType: "json"}).always(function(data){
-				$("#icon-ctn").html(template(data));				
-			});		
-		});
+		// NOTE: For maximum flexibility, the best way is to load the .svg symbols and add them to the <head> tag
+		//       Having them as external resources kind of work, but introduce many issues (no caching in some circunstances, and limited styling)
+		//
+		// IMPORTANT: Make sure to use the ajax lib used in your app to load the xml and add it to the head. 
+		//            Also, you usually do not need to get the list of icons, here just used to be able to list them all. 
+		//
+		// NOTE: in the svg use tag above, we do not use the viewBox anymore, since it id not needed. But make sure to have the svg-ico with 
+		//       width and height 100% so the container div will be the one to size in the application. 
+		document.addEventListener("DOMContentLoaded", function(event) {
+
+			// DEMO ONLY: Get the handlebars template that will render all the symbols
+			var sourceHTML = document.getElementById("icons-view").innerHTML;
+			var template = Handlebars.compile(sourceHTML);
+
+			// get the sprite.svg svg/symbols to add them in the head
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", spriteName + ".svg");
+			xhr.setRequestHeader('Content-Type', 'application/xml');
+			xhr.onload = function() {
+				if (xhr.status === 200) {
+					var txt = xhr.responseText;
+					var parser = new DOMParser();
+					var xml = parser.parseFromString(txt, "application/xml");
+
+					// DEMO ONLY: This is for the demo only, to get a list of all of the symbol names
+					var symbols = [];
+					xml.querySelectorAll("symbol").forEach(function(sym){
+						symbols.push({name:sym.getAttribute("id")});
+					});
+
+					// IMPORTANT: This is the important part where when we add the symbols in the head for future use
+					document.querySelector("head").appendChild(xml.firstElementChild);					
+
+					// DEMO ONLY: We render all of the symbolese using the "" 
+					document.querySelector("#icons-ctn").innerHTML = template({symbols: symbols});
+				}else{
+					console.log("ERROR ", xhr);
+				}
+			};
+			xhr.send();
+
+		});		
 		</script>
 	</head>	
 
 	<body>
 		<h1>Icons</h1>
-		<div id="icon-ctn">
+		<div id="icons-ctn">
 
 		</div>
 

@@ -23,6 +23,21 @@ class Sketch{
 	async export(opts){
 		return exportFn(this.file, opts);
 	}
+
+	async exportIcons(distDir){
+		await fs.mkdirs(distDir);
+
+		var svgDir = path.join(distDir, "svg/");
+		var spritePath = path.join(distDir, "sprite/sprite.svg");
+		var opts = {
+			out: svgDir,
+			artboardName: /^ico\/[\w-]*\/\d*$/, // the regex matching artboard that should be exported
+			flatten: '-',
+			sprite: spritePath
+		};
+
+		return this.export(opts);
+	}
 }
 
 // --------- Mobule Methods --------- //
@@ -60,6 +75,7 @@ async function artboards(file, opts){
 
 	return artboards;
 }
+
 
 // Export artboard files
 // opts.out: String representing the output dir
@@ -198,11 +214,6 @@ async function sprite(svgDir, opts){
 	console.log('will write sprite to:', opts.out);	
 	await fs.writeFile(opts.out, contentStr);
 	
-	// write the sprite json	
-	var jsonStr = JSON.stringify({symbols: symbols}, null, 2);
-	var jsonPath = path.join(outInfo.dir, outInfo.name + ".data");
-	await fs.writeFile(jsonPath, jsonStr);
-
 	// copy the template file
 	var fromDemoPath = path.join(__dirname,"template-demo.html");
 	var toDemoPath = path.join(outInfo.dir, outInfo.name + "-demo.html");
