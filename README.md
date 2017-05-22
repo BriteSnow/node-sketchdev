@@ -12,7 +12,7 @@ Note: Version >= 0.2.0 requires native async/await support, so, node.js >= 7.10
 
 #### .exportIcons
 
-Simpler, exporting icons following the `ico/.../dd` format (see [test/samples/sample-sketch.sketch])
+Simpler, exporting icons following the `ico/.../dd` format (see [test/samples/sample-sketch.sketch](https://github.com/BriteSnow/node-sketchdev/blob/master/test/samples/sample-sketch.sketch))
 
 ```js
 const sketchdev = require("sketchdev");
