@@ -19,8 +19,21 @@ const sketchdev = require("sketchdev");
 
 var sketch_file = "./myapp-spec.sketch";
 sketchdev(file).exportIcons("./dist");
+
+// this will call the .export with the following option
+// var svgDir = path.join(distDir, "svg/");
+// var spritePath = path.join(distDir, "sprite/sprite.svg");
+// 
+// var defaultOpts = {
+//     out: svgDir,
+//     artboardName: /^ico\/[\w-]*\/\d*$/, // the regex matching artboard that should be exported
+//     flatten: '-',
+//     sprite: spritePath
+// };
+
 ```
 
+Note: you can override the default above with `.exportIcons(distDir,opts)`
 
 #### .export
 
@@ -49,4 +62,5 @@ async function export(file){
             }); 
 }
 ```
+
 

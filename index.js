@@ -24,17 +24,23 @@ class Sketch{
 		return exportFn(this.file, opts);
 	}
 
-	async exportIcons(distDir){
+	async exportIcons(distDir, opts){
 		await fs.mkdirs(distDir);
 
+		// build the defaultOpts
 		var svgDir = path.join(distDir, "svg/");
 		var spritePath = path.join(distDir, "sprite/sprite.svg");
-		var opts = {
+
+		var defaultOpts = {
 			out: svgDir,
 			artboardName: /^ico\/[\w-]*\/\d*$/, // the regex matching artboard that should be exported
 			flatten: '-',
 			sprite: spritePath
 		};
+
+		opts = (opts)?Object.assign({}, defaultOpts, opts):defaultOpts;
+
+
 
 		return this.export(opts);
 	}
