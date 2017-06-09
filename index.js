@@ -136,7 +136,9 @@ async function exportFn(file, opts){
 				// replace the folder path by '-'
 				let name = file.substring(out.length).replace(/\//gi,opts.flatten);
 				// remove the last -dd
-				name = name.replace(/-\d.*$/,'');
+				name = name.replace(/-\d.*$/,'');				
+				// remove the ventual last .svg
+				name = name.replace(/\.svg$/,'');
 
 				let to = path.join(opts.out,name + ".svg");
 				await fs.copy(file,to);				
