@@ -4,12 +4,13 @@ const { spawn } = require("p-spawn");
 const cheerio = require("cheerio");
 
 
-module.exports = function (file) {
-	return new Sketch(file);
-};
+module.exports = { sketchdev };
 
 const tool_path = "/Applications/Sketch.app/Contents/Resources/sketchtool/bin/sketchtool";
 
+function sketchdev(sketchFile) {
+	return new Sketch(sketchFile);
+}
 
 class Sketch {
 	constructor(file) {
@@ -46,11 +47,9 @@ class Sketch {
 	}
 }
 
+
 // --------- Mobule Methods --------- //
 
-// List the artboards
-// opts.pageName:  (optional) String or regex matching the page.name
-// opts.name: (optional) String or regex matching the artboard.name
 async function artboards(file, opts) {
 	// for sketch <= 42
 	// var docStr = yield exec(tool_path, ['--include-symbols=YES','--include-namespaces=YES', 'list', 'artboards', file]);
@@ -82,13 +81,6 @@ async function artboards(file, opts) {
 	return artboards;
 }
 
-
-// Export artboard files
-// opts.out: String representing the output dir
-// opts.items: (optional) Array string of item ids (take precedence on opts.artboardName)
-// opts.artboardName: (optional) String or regex maching the artboard.name
-// opts.flatten: (optional) string that describe the separator in case we have artboard in subfolders.
-// opts.sprite: (optional) path of the svg sprite (with <symbol> tags of all of the files)
 async function exportFn(file, opts) {
 
 	try {
