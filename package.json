@@ -15,13 +15,16 @@
     "sprite"
   ],
   "dependencies": {
-    "cheerio": "^0.22.0",
-    "fs-extra-plus": "^0.1.0",
-    "p-spawn": "^0.2.0"
+    "cheerio": "^1.0.0-rc.2",
+    "fs-extra-plus": "^0.2.2",
+    "p-spawn": "^0.4.0"
   },
   "devDependencies": {},
+  "scripts": {
+    "test": "node test/test"
+  },
   "engines": {
-    "node": ">=7.10.0"
+    "node": ">=8.0.0"
   },
   "author": "Jeremy Chone <jeremy.chone@gmail.com>",
   "license": "MIT",
