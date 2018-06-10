@@ -23,7 +23,7 @@ export interface ExportOptions {
 
 export class Sketch {
 	constructor(file: string);
-	artboards(opts?: QueryOptions): Any;
+	artboards(opts?: QueryOptions): any;
 	export(opts: ExportOptions): void;
 	exportIcons(distDir: string, opts?: ExportOptions): void;
 }
