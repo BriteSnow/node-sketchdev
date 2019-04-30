@@ -122,7 +122,7 @@ async function exportFn(file, opts) {
 		// if we have the opts.flatten attribute, we need to move the _tmp/**.svg to the opts.out dir
 		// and flatten the name
 		if (opts.flatten) {
-			var svgFiles = await fs.listFiles(out, { suffix: ".svg" });
+			var svgFiles = await fs.glob(`${out}/**/*.svg`);
 
 			for (file of svgFiles) {
 				// replace the folder path by '-'
@@ -137,7 +137,7 @@ async function exportFn(file, opts) {
 			}
 
 			//remove the out (which is ..._tmp/)
-			await fs.remove(out);
+			await fs.saferRemove(out);
 
 		}
 
@@ -160,7 +160,7 @@ var cheerioXmlOpts = {
 // opts.out: the svg file to be created
 // opts.trims: (not supported yet, trim 'fill attribute') array of string for each property that need to be trimmed
 async function sprite(svgDir, opts) {
-	var svgFiles = await fs.listFiles(svgDir, { suffix: ".svg" });
+	var svgFiles = await fs.glob(`${svgDir}**/*.svg`);
 
 	var content = ['<svg xmlns="http://www.w3.org/2000/svg" style="width:0; height:0; visibility:hidden; display:none">'];
 	var symbols = [];
