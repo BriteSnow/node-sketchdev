@@ -122,7 +122,8 @@ async function exportFn(file, opts) {
 		// if we have the opts.flatten attribute, we need to move the _tmp/**.svg to the opts.out dir
 		// and flatten the name
 		if (opts.flatten) {
-			var svgFiles = await fs.glob(`${out}/**/*.svg`);
+			let svgsGlob = path.join(out, '/**/*.svg');
+			let svgFiles = await fs.glob(svgsGlob);
 
 			for (file of svgFiles) {
 				// replace the folder path by '-'
