@@ -1,13 +1,12 @@
-const fs = require("fs-extra-plus");
-const path = require("path");
-const { sketchdev } = require("../index.js");
+import * as fs from 'fs-extra-plus';
+import * as Path from 'path';
+import { sketchdev } from '../src';
 
 const dir = __dirname;
 
 var sampleFileNames = ["sample-sketch.sketch"];
 
-var outDir = path.join(dir, "out/");
-
+var outDir = Path.join(dir, "out/");
 
 performTest();
 
@@ -20,11 +19,16 @@ async function performTest() {
 		}
 
 		for (let fileName of sampleFileNames) {
-			let sketchFile = path.join(dir, "samples/", fileName);
+			let sketchFile = Path.join(dir, "samples/", fileName);
 			let sketchDoc = sketchdev(sketchFile);
 
-			let distDir = path.join(outDir, path.basename(fileName, ".sketch") + "-dist", "/");
+			let distDir = Path.join(outDir, Path.basename(fileName, ".sketch") + "-dist", "/");
 			await sketchDoc.exportIcons(distDir);
+			await sketchDoc.export({
+				format: 'png',
+				out: outDir,
+				artboardName: /^images\/.*$/
+			})
 		}
 	} catch (ex) {
 		console.log("UNEXPECTED ERROR CATCH\n", ex);

@@ -1,38 +1,57 @@
-const fs = require("fs-extra-plus");
-const path = require("path");
-const { spawn } = require("p-spawn");
-const cheerio = require("cheerio");
-
-
-module.exports = { sketchdev };
+import * as fs from 'fs-extra-plus'
+import * as Path from 'path';
+import { spawn } from 'p-spawn';
+import * as cheerio from 'cheerio';
 
 const tool_path = "/Applications/Sketch.app/Contents/Resources/sketchtool/bin/sketchtool";
 
-function sketchdev(sketchFile) {
+export function sketchdev(sketchFile: string) {
 	return new Sketch(sketchFile);
+}
+export interface QueryOptions {
+	/* string or regex matching the page.name */
+	pageName?: string | RegExp;
+	/* String or regex matching the artboard.name */
+	name: string | RegExp;
+}
+
+export interface ExportOptions {
+	format?: 'svg' | 'png' | 'jpeg';
+	// String representing the output dir
+	out: string;
+	// Array string of item ids (take precedence on opts.artboardName)
+	items?: string[];
+	// String or regex maching the artboard.name
+	artboardName?: string | RegExp;
+	// string that describe the separator in case we have artboard in subfolders.
+	flatten?: string;
+	// path of the svg sprite(with <symbol>tags of all of the files)
+	sprite?: string;
 }
 
 class Sketch {
-	constructor(file) {
+	file: string;
+
+	constructor(file: string) {
 		this.file = file;
 	}
 
-	async artboards(opts) {
+	async artboards(opts: QueryOptions) {
 		return artboards(this.file, opts);
 	}
 
-	async export(opts) {
+	async export(opts: ExportOptions) {
 		return exportFn(this.file, opts);
 	}
 
-	async exportIcons(distDir, opts) {
+	async exportIcons(distDir: string, opts?: ExportOptions) {
 		await fs.mkdirs(distDir);
 
 		// build the defaultOpts
-		var svgDir = path.join(distDir, "svg/");
-		var spritePath = path.join(distDir, "sprite/sprite.svg");
+		const svgDir = Path.join(distDir, "svg/");
+		const spritePath = Path.join(distDir, "sprite/sprite.svg");
 
-		var defaultOpts = {
+		const defaultOpts = {
 			out: svgDir,
 			artboardName: /^ico\/[\w-]*\/\d*$/, // the regex matching artboard that should be exported
 			flatten: '-',
@@ -50,26 +69,34 @@ class Sketch {
 
 // --------- Mobule Methods --------- //
 
-async function artboards(file, opts) {
-	// for sketch <= 42
-	// var docStr = yield exec(tool_path, ['--include-symbols=YES','--include-namespaces=YES', 'list', 'artboards', file]);
 
+interface SketchListArtboardsResult {
+	pages: {
+		name: string
+		artboards: {
+			id: string,
+			name: string
+		}[]
+	}[]
+}
+
+async function artboards(file: string, opts: QueryOptions): Promise<{ id: string }[]> {
 	// list the artboards and parse the result into a doc
-	var cmdArgs = ['--include-symbols=YES', 'list', 'artboards', file];
+	const cmdArgs = ['--include-symbols=YES', 'list', 'artboards', file];
 
-	var r = await spawn(tool_path, cmdArgs, { capture: "stdout" });
-	var docStr = r.stdout;
+	const r = await spawn(tool_path, cmdArgs, { capture: "stdout" });
+	const docStr = r.stdout;
 
-	var doc = JSON.parse(docStr);
+	const doc = JSON.parse(docStr) as SketchListArtboardsResult;
 
 	// todo: use opts.pageName to match the pages we want.
-	var pages = doc.pages.filter(p => true);
+	const pages = doc.pages.filter(p => true);
 
-	var artboards = [];
-	var matchArtboardName = (opts) ? opts.name : null;
+	const artboards = [];
+	const matchArtboardName = (opts) ? opts.name : null;
 
-	for (let page of pages) {
-		for (let board of page.artboards) {
+	for (const page of pages) {
+		for (const board of page.artboards) {
 			// todo: match with opts.pageName
 
 			if (match(matchArtboardName, board.name)) {
@@ -81,16 +108,17 @@ async function artboards(file, opts) {
 	return artboards;
 }
 
-async function exportFn(file, opts) {
+async function exportFn(file: string, opts: ExportOptions) {
 
 	try {
+		const format = opts.format ?? 'svg';
 		// sketch >= 42
-		var args = ['--include-symbols=YES',
-			'--format=svg'];
+		const args = ['--include-symbols=YES',
+			`--format=${format}`];
 		// ,'--include-namespaces=NO'
 
 		// what take precedence is the opts.items
-		var items = opts.items;
+		let items = opts.items;
 
 		// if we do not have opts.items and have a opts.artboardName then, we match them.
 		if (!items && opts.artboardName) {
@@ -103,7 +131,7 @@ async function exportFn(file, opts) {
 		}
 
 		// if we have a opts.flatten option, the output is opts.out + "_tmp/"
-		var out = opts.out;
+		let out = opts.out;
 		if (opts.flatten) {
 			out = opts.out + "_tmp/";
 		}
@@ -122,7 +150,7 @@ async function exportFn(file, opts) {
 		// if we have the opts.flatten attribute, we need to move the _tmp/**.svg to the opts.out dir
 		// and flatten the name
 		if (opts.flatten) {
-			let svgsGlob = path.join(out, '/**/*.svg');
+			let svgsGlob = Path.join(out, '/**/*.svg');
 			let svgFiles = await fs.glob(svgsGlob);
 
 			for (file of svgFiles) {
@@ -133,7 +161,7 @@ async function exportFn(file, opts) {
 				// remove the ventual last .svg
 				name = name.replace(/\.svg$/, '');
 
-				let to = path.join(opts.out, name + ".svg");
+				let to = Path.join(opts.out, name + ".svg");
 				await fs.copy(file, to);
 			}
 
@@ -152,7 +180,7 @@ async function exportFn(file, opts) {
 
 
 
-var cheerioXmlOpts = {
+const cheerioXmlOpts = {
 	normalizeWhitespace: true,
 	xmlMode: true
 };
@@ -160,19 +188,19 @@ var cheerioXmlOpts = {
 // merge all .svg from svgDir into a sprite.svg file
 // opts.out: the svg file to be created
 // opts.trims: (not supported yet, trim 'fill attribute') array of string for each property that need to be trimmed
-async function sprite(svgDir, opts) {
-	var svgFiles = await fs.glob(`${svgDir}**/*.svg`);
+async function sprite(svgDir: string, opts: { out: string }) {
+	const svgFiles = await fs.glob(`${svgDir}**/*.svg`);
 
-	var content = ['<svg xmlns="http://www.w3.org/2000/svg" style="width:0; height:0; visibility:hidden; display:none">'];
-	var symbols = [];
+	const content = ['<svg xmlns="http://www.w3.org/2000/svg" style="width:0; height:0; visibility:hidden; display:none">'];
+	const symbols = [];
 
 
 	for (let file of svgFiles) {
 		let fileContent = await fs.readFile(file, 'utf8');
 
-		let fileInfo = path.parse(file);
+		let fileInfo = Path.parse(file);
 
-		let symbol = {
+		let symbol: { name: string, viewBox?: string } = {
 			name: fileInfo.name
 		};
 
@@ -206,38 +234,37 @@ async function sprite(svgDir, opts) {
 	content.push('</svg>');
 
 
-	var outInfo = path.parse(opts.out);
+	const outInfo = Path.parse(opts.out);
 	// create the sprite folder
 	await fs.mkdirs(outInfo.dir);
 
 	// write the sprite svg
-	var contentStr = content.join("\n");
+	const contentStr = content.join("\n");
 	console.log('will write sprite to:', opts.out);
 	await fs.writeFile(opts.out, contentStr);
 
 	// copy the template file
-	var fromDemoPath = path.join(__dirname, "template-demo.html");
-	var toDemoPath = path.join(outInfo.dir, outInfo.name + "-demo.html");
+	const fromDemoPath = Path.join(__dirname, "../template-demo.html");
+	const toDemoPath = Path.join(outInfo.dir, outInfo.name + "-demo.html");
 	await fs.copy(fromDemoPath, toDemoPath);
 }
 // --------- /Mobule Methods --------- //
 
 
 // --------- Utilities --------- //
-const STR = "string";
-function match(nameOrRgx, value) {
+function match(nameOrRgx: string | RegExp | null, value: string) {
 	// if no nameOrRgx, then, we match it.
 	if (!nameOrRgx) {
 		return value;
 	}
-	if (typeof nameOrRgx === STR) {
+	if (typeof nameOrRgx === 'string') {
 		return (nameOrRgx === value);
 	}
 	// assume it is a regex
 	return value.match(nameOrRgx);
 }
 
-function wait(ms) {
+function wait(ms: number) {
 	return new Promise(function (resolve, reject) {
 		setTimeout(function () {
 			resolve();
