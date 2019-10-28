@@ -22,12 +22,13 @@
 
 		// "lib": ["esnext","dom"],
 
-		"sourceMap": false,  // we do not need the sourcemap		
+		"sourceMap": true,  // we do not need the sourcemap		
 
 		// Since we are using ts-node, not really needed, but just in case we want to do a "tsc" on folder.
 		"outDir": "./dist/", /* Redirect output structure to the directory. */
 
 		"baseUrl": ".",
+		"declaration": true,
 		
 		"experimentalDecorators": true,
 				
