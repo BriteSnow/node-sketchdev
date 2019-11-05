@@ -1,6 +1,12 @@
 # Ignore Mac stuff
 .DS_Store
 
+# Ignore dist
+dist/
+
+# Ignore anything starting with 
+~*
+
 # Ignore test/out
 test/out
 
@@ -14,6 +20,7 @@ node_modules/
 # Safeguards (for no web/ui projects)
 *.png
 *.jpeg
+*.jpg
 
 # Ignore vscode
 .vscode
