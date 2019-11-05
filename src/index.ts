@@ -23,6 +23,10 @@ export interface ExportOptions {
 	items?: string[];
 	// String or regex maching the artboard.name
 	artboardName?: string | RegExp;
+
+	// Replace the file name characters base on regex (i.e. remove last /number)
+	replace?: [RegExp, string];
+
 	// string that describe the separator in case we have artboard in subfolders.
 	flatten?: string;
 	// path of the svg sprite(with <symbol>tags of all of the files)
@@ -50,9 +54,9 @@ class Sketch {
 		// build the defaultOpts
 		const svgDir = Path.join(distDir, "svg/");
 		const spritePath = Path.join(distDir, "sprite/sprite.svg");
-
 		const defaultOpts = {
 			out: svgDir,
+			replace: [/\/\d.*$/, ''] as [RegExp, string],
 			artboardName: /^ico\/[\w-]*\/\d*$/, // the regex matching artboard that should be exported
 			flatten: '-',
 			sprite: spritePath
@@ -154,10 +158,16 @@ async function exportFn(file: string, opts: ExportOptions) {
 			let svgFiles = await fs.glob(svgsGlob);
 
 			for (file of svgFiles) {
-				// replace the folder path by '-'
-				let name = file.substring(out.length).replace(/\//gi, opts.flatten);
-				// remove the last -dd
-				name = name.replace(/-\d.*$/, '');
+				let name = file;
+
+				// remove the last /number (assumed to be dims)
+				if (opts.replace) {
+					name = name.replace(opts.replace[0], opts.replace[1]);
+				}
+
+				// replace the folder path by flattern charactor (.e.g, '-')
+				name = name.substring(out.length).replace(/\//gi, opts.flatten);
+
 				// remove the ventual last .svg
 				name = name.replace(/\.svg$/, '');
 

@@ -8,6 +8,7 @@ export interface ExportOptions {
     out: string;
     items?: string[];
     artboardName?: string | RegExp;
+    replace?: [RegExp, string];
     flatten?: string;
     sprite?: string;
 }

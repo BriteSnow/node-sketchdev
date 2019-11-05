@@ -26,6 +26,7 @@ class Sketch {
         const spritePath = Path.join(distDir, "sprite/sprite.svg");
         const defaultOpts = {
             out: svgDir,
+            replace: [/\/\d.*$/, ''],
             artboardName: /^ico\/[\w-]*\/\d*$/,
             flatten: '-',
             sprite: spritePath
@@ -91,10 +92,13 @@ async function exportFn(file, opts) {
             let svgsGlob = Path.join(out, '/**/*.svg');
             let svgFiles = await fs.glob(svgsGlob);
             for (file of svgFiles) {
-                // replace the folder path by '-'
-                let name = file.substring(out.length).replace(/\//gi, opts.flatten);
-                // remove the last -dd
-                name = name.replace(/-\d.*$/, '');
+                let name = file;
+                // remove the last /number (assumed to be dims)
+                if (opts.replace) {
+                    name = name.replace(opts.replace[0], opts.replace[1]);
+                }
+                // replace the folder path by flattern charactor (.e.g, '-')
+                name = name.substring(out.length).replace(/\//gi, opts.flatten);
                 // remove the ventual last .svg
                 name = name.replace(/\.svg$/, '');
                 let to = Path.join(opts.out, name + ".svg");

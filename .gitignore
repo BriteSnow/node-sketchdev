@@ -7,11 +7,13 @@ test/out
 # Ignore Nodejs modules
 node_modules/
 
-# Safeguard
+# Safeguards
 *.tgz
+*.zip
+
+# Safeguards (for no web/ui projects)
 *.png
 *.jpeg
-*.zip
 
 # Ignore vscode
 .vscode
