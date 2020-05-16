@@ -1,7 +1,7 @@
-import * as fs from 'fs-extra-plus'
-import * as Path from 'path';
-import { spawn } from 'p-spawn';
 import * as cheerio from 'cheerio';
+import * as fs from 'fs-extra-plus';
+import { spawn } from 'p-spawn';
+import * as Path from 'path';
 
 const tool_path = "/Applications/Sketch.app/Contents/Resources/sketchtool/bin/sketchtool";
 
@@ -227,8 +227,10 @@ async function sprite(svgDir: string, opts: { out: string }) {
 
 		// get the same viewBox as the svg source element
 		let viewBox = $srcSvg.attr("viewBox");
-		$symbol.attr("viewBox", viewBox);
-		symbol.viewBox = viewBox;
+		if (viewBox) {
+			$symbol.attr("viewBox", viewBox);
+			symbol.viewBox = viewBox;
+		}
 
 		// append the first g element from the src element to the symbol
 		let $g = $srcSvg.children("g").clone();

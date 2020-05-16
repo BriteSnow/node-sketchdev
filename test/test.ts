@@ -6,14 +6,14 @@ const dir = __dirname;
 
 var sampleFileNames = ["sample-sketch.sketch"];
 
-var outDir = Path.join(dir, "out/");
+var outDir = Path.join(dir, ".out/");
 
 performTest();
 
 async function performTest() {
 	try {
 		// just some simple guard on delete
-		if (outDir.endsWith("test/out/")) {
+		if (outDir.endsWith("test/.out/")) {
 			await fs.remove(outDir);
 			console.log("test cleanup - delete:", outDir);
 		}

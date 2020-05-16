@@ -1,14 +1,11 @@
-# Ignore Mac stuff
-.DS_Store
+# By Default, Ignore any .  Mac stuff
+.*
+
+# Except .gitgnore
+!.gitignore
 
 # Ignore dist
 dist/
-
-# Ignore anything starting with 
-~*
-
-# Ignore test/out
-test/out
 
 # Ignore Nodejs modules
 node_modules/
