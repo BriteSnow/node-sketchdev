@@ -44,7 +44,7 @@ class Sketch {
 		return artboards(this.file, opts);
 	}
 
-	async export(opts: ExportOptions) {
+	async exportArtboards(opts: ExportOptions) {
 		return exportFn(this.file, opts);
 	}
 
@@ -65,7 +65,7 @@ class Sketch {
 
 
 
-		return this.export(opts);
+		return this.exportArtboards(opts);
 	}
 }
 

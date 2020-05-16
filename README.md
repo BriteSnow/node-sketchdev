@@ -7,7 +7,8 @@ Status: **Experimetal** APIs will probably change.
 ## Changelog
 
 - **0.5.0** (May 16th 2020) 
-  - `exportIcons` now default for `artboardName` is `/^ico\/.*/` and still flatten with `-`
+  - `!` - `exportIcons` now default for `artboardName` is `/^ico\/.*/` and still flatten with `-`
+  - `!` - Rename `Sketch` member function `.exports(...)` to `.exportArtboards(...)`
 
 ## Usage
 
@@ -58,11 +59,12 @@ async function export(file){
     var distSpriteFile = dist + 'sprite/sprite.svg'; 
 
     // return a promise
-    await sketchDoc.export({out: distSvg, 
-            artboardName: /^ico\/[\w-]*\/\d*$/, // the regex matching artboard that should be exported
-            flatten: '-', // if artboards contain '/' it will be stored in the corresponding folder sturucture, "flatten" just flatten the stucture with a a given char that will replace the '/'
-            sprite: distSpriteFile // output all svg as symbols in a sprite.svg and generage a sprite-demo.html page as well
-            }); 
+    await sketchDoc.exportArtboards({out: distSvg, 
+      format: 'svg', // 'svg' | 'png' | 'jpeg' (if no svg, no sprit.svg)
+      artboardName: /^my-icon\/.*/, // the regex matching artboard that should be exported
+      flatten: '_', // if artboards contain '/' it will be stored in the corresponding folder sturucture, "flatten" just flatten the stucture with a a given char that will replace the '/'
+      sprite: distSpriteFile // output all svg as symbols in a sprite.svg and generage a sprite-demo.html page as well
+    }); 
 }
 ```
 

@@ -24,7 +24,7 @@ async function performTest() {
 
 			let distDir = Path.join(outDir, Path.basename(fileName, ".sketch") + "-dist", "/");
 			await sketchDoc.exportIcons(distDir);
-			await sketchDoc.export({
+			await sketchDoc.exportArtboards({
 				format: 'png',
 				out: outDir,
 				artboardName: /^images\/.*$/
