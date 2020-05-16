@@ -16,16 +16,20 @@
   ],
   "dependencies": {
     "@types/cheerio": "^0.22.13",
+    "@types/mocha": "^7.0.2",
     "cheerio": "^1.0.0-rc.3",
     "fs-extra-plus": "^0.5.11",
+    "mocha": "^7.1.2",
     "p-spawn": "^0.5.0",
+    "rimraf": "^3.0.2",
     "ts-node": "^8.4.1",
     "typescript": "^3.7.2"
   },
   "devDependencies": {},
   "scripts": {
-    "prepack": "rm -Rf ./dist && ./node_modules/.bin/tsc",
-    "test": "TS_NODE_FILES=true ./node_modules/.bin/ts-node test/test"
+    "test": "TS_NODE_FILES=true ./node_modules/.bin/mocha -p ./test/tsconfig.json ./test/spec/*.spec.ts",
+    "testw": "TS_NODE_FILES=true ./node_modules/.bin/mocha -p ./test/tsconfig.json ./test/spec/*.spec.ts --watch --watch-files './test/**/*.ts','./src/**/*.ts'",
+    "prepack": "node_modules/.bin/rimraf ./dist && ./node_modules/.bin/tsc"
   },
   "engines": {
     "node": ">=12.0.0"
