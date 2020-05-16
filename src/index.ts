@@ -56,8 +56,7 @@ class Sketch {
 		const spritePath = Path.join(distDir, "sprite/sprite.svg");
 		const defaultOpts = {
 			out: svgDir,
-			replace: [/\/\d.*$/, ''] as [RegExp, string],
-			artboardName: /^ico\/[\w-]*\/\d*$/, // the regex matching artboard that should be exported
+			artboardName: /^ico\/.*/, // the regex matching artboard that should be exported
 			flatten: '-',
 			sprite: spritePath
 		};
@@ -199,7 +198,7 @@ const cheerioXmlOpts = {
 // opts.out: the svg file to be created
 // opts.trims: (not supported yet, trim 'fill attribute') array of string for each property that need to be trimmed
 async function sprite(svgDir: string, opts: { out: string }) {
-	const svgFiles = await fs.glob(`${svgDir}**/*.svg`);
+	const svgFiles = await fs.glob(`${svgDir}/*.svg`);
 
 	const content = ['<svg xmlns="http://www.w3.org/2000/svg" style="width:0; height:0; visibility:hidden; display:none">'];
 	const symbols = [];
@@ -213,6 +212,7 @@ async function sprite(svgDir: string, opts: { out: string }) {
 		let symbol: { name: string, viewBox?: string } = {
 			name: fileInfo.name
 		};
+
 
 		// get the src svg Doc
 		let srcDoc = cheerio.load(fileContent, cheerioXmlOpts);

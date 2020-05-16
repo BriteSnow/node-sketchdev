@@ -4,10 +4,10 @@ Experimental node module that uses sketchapp tool chain to streamline designer/d
 
 Status: **Experimetal** APIs will probably change. 
 
-Notes: 
-- From version 0.2.0 requires node.js > 8.0.0
-- From version 0.3.0 needs to be imported as `{ sketchdev }`
-- From version 0.3.0 includes basic typescript defintions.
+## Changelog
+
+- **0.5.0** (May 16th 2020) 
+  - `exportIcons` now default for `artboardName` is `/^ico\/.*/` and still flatten with `-`
 
 ## Usage
 
@@ -29,7 +29,7 @@ await sketchdev(file).exportIcons('./dist');
 // 
 // var defaultOpts = {
 //     out: svgDir,
-//     artboardName: /^ico\/[\w-]*\/\d*$/, // the regex matching artboard that should be exported
+//     artboardName: /^ico\/.*/, // the regex matching artboard that should be exported
 //     flatten: '-',
 //     sprite: spritePath
 // };

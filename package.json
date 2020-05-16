@@ -1,6 +1,6 @@
 {
   "name": "sketchdev",
-  "version": "0.4.2",
+  "version": "0.5.0-SNAPSHOT",
   "description": "Sketchapp utilities to streamline designer/developer workflow (using sketchapp tool chain).",
   "main": "dist/index.js",
   "repository": {
@@ -28,7 +28,7 @@
     "test": "TS_NODE_FILES=true ./node_modules/.bin/ts-node test/test"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=12.0.0"
   },
   "author": "Jeremy Chone <jeremy.chone@gmail.com>",
   "license": "MIT",
