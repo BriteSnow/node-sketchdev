@@ -10,6 +10,8 @@ dist/
 # Ignore Nodejs modules
 node_modules/
 
+test/samples/sample-sketch/
+
 # Safeguards
 *.tgz
 *.zip

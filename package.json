@@ -15,6 +15,7 @@
     "sprite"
   ],
   "dependencies": {
+    "@sketch-hq/sketch-file-format-ts": "^5.0.0",
     "@types/cheerio": "^0.22.13",
     "@types/mocha": "^7.0.2",
     "cheerio": "^1.0.0-rc.3",
@@ -23,9 +24,15 @@
     "p-spawn": "^0.5.0",
     "rimraf": "^3.0.2",
     "ts-node": "^8.4.1",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.2",
+    "utils-min": "^0.1.7",
+    "yauzl": "^2.10.0",
+    "yauzl-promise": "^2.1.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/yauzl": "^2.9.1",
+    "@types/yauzl-promise": "^2.1.0"
+  },
   "scripts": {
     "test": "TS_NODE_FILES=true ./node_modules/.bin/mocha -p ./test/tsconfig.json ./test/spec/*.spec.ts",
     "testw": "TS_NODE_FILES=true ./node_modules/.bin/mocha -p ./test/tsconfig.json ./test/spec/*.spec.ts --watch --watch-files './test/**/*.ts','./src/**/*.ts'",

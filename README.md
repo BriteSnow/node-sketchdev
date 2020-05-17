@@ -1,12 +1,14 @@
 ## Intro
 
-Experimental node module that uses sketchapp tool chain to streamline designer/developer workflow. The first functionality is outputing Sketch App icon/symbols into SVG symbol sprite to be reused in application code. 
+Experimental node module that uses [sketchapp tool chain](https://developer.sketch.com/cli/) to streamline designer/developer workflow. The first functionality is outputing Sketch App icon/symbols into SVG symbol sprite to be reused in application code. 
 
 Status: **Experimetal** APIs will probably change. 
 
 ## Changelog
 
 - **0.5.0** (May 16th 2020) 
+  - `+` - Added `.exportStyles(...)` and `.styles()` (for now, color only, first fill style)
+  - `!` - `artboardName` and `stylename` `opts` properties when string, match as startsWith (no more exact match anymore)
   - `!` - `exportIcons` now default for `artboardName` is `/^ico\/.*/` and still flatten with `-`
   - `!` - Rename `Sketch` member function `.exports(...)` to `.exportArtboards(...)`
 
