@@ -54,7 +54,7 @@ class Sketch {
 					stroke = [red, blue, green, alpha];
 				}
 
-				result.push({ name, ...prune({ fill, stroke }) });
+				result.push(prune({ name, fill, stroke }));
 			}
 		}
 		return result;
