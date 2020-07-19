@@ -191,7 +191,7 @@ async function sketch_artboards(file: string, opts?: QueryOptions): Promise<{ id
 	const r = await spawn(tool_path, cmdArgs, { capture: "stdout" });
 	const docStr = r.stdout;
 
-	const doc = JSON.parse(docStr) as SketchListArtboardsResult;
+	const doc = JSON.parse(docStr!) as SketchListArtboardsResult;
 
 	// todo: use opts.pageName to match the pages we want.
 	const pages = doc.pages.filter(p => true);
