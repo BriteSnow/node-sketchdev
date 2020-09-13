@@ -1,73 +1,45 @@
 ## Intro
 
-Experimental node module that uses [sketchapp tool chain](https://developer.sketch.com/cli/) to streamline designer/developer workflow. The first functionality is outputing Sketch App icon/symbols into SVG symbol sprite to be reused in application code. 
+Command line (with API available) node module that generate html assets (.svg, .png, .jpeg, .css) from [sketch.app](https://www.sketch.com/) application.
 
-Status: **Experimetal** APIs will probably change. 
+This extension uses [sketchapp tool chain](https://developer.sketch.com/cli/).
+
 
 ## Changelog
 
-- **0.5.0** (May 16th 2020) 
-  - `+` - Added `.exportStyles(...)` and `.styles()` (for now, color only, first fill style)
-  - `!` - `artboardName` and `stylename` `opts` properties when string, match as startsWith (no more exact match anymore)
-  - `!` - `exportIcons` now default for `artboardName` is `/^ico\/.*/` and still flatten with `-`
-  - `!` - Rename `Sketch` member function `.exports(...)` to `.exportArtboards(...)`
+- **0.6.0** Sep 13, 2020
+  - `!` Major refactor, now `sketchdev.config.js` driven. 
+
 
 ## Usage
 
-#### .exportIcons
+```sh
+npm install -D sketchdev
 
-Simpler, exporting icons following the `ico/.../dd` format (see [test/samples/sample-sketch.sketch](https://github.com/BriteSnow/node-sketchdev/blob/master/test/samples/sample-sketch.sketch))
+# create sketchdev.config.js (or .sketchdev.config.js) as below
 
-```js
-const { sketchdev } = require('sketchdev');
-
-var sketch_file = './myapp-spec.sketch';
-var sketch = sketchdev(file); // will return a Sketch object
-
-await sketchdev(file).exportIcons('./dist');
-
-// this will call the .export with the following option
-// var svgDir = path.join(distDir, "svg/");
-// var spritePath = path.join(distDir, "sprite/sprite.svg");
-// 
-// var defaultOpts = {
-//     out: svgDir,
-//     artboardName: /^ico\/.*/, // the regex matching artboard that should be exported
-//     flatten: '-',
-//     sprite: spritePath
-// };
-
+node ./node_module/.bin/sketchdev
 ```
 
-Note: you can override the default above with `.exportIcons(distDir,opts)`
-
-#### .export
-
-Used by exportIcons (with the above default)
-
+**sketchdev.config.js**
 ```js
-const { sketchdev } = require('sketchdev');
-
-var sketch_file = './myapp-spec.sketch';
-
-export(sketch_file);
-
-async function export(file){
-       // create a JS object that will represent this sketch document
-    var sketchDoc = sketchdev(file); 
-
-    var dist = './dist/'
-    var distSvg = dist + 'svg/'; 
-    var distSpriteFile = dist + 'sprite/sprite.svg'; 
-
-    // return a promise
-    await sketchDoc.exportArtboards({out: distSvg, 
-      format: 'svg', // 'svg' | 'png' | 'jpeg' (if no svg, no sprit.svg)
-      artboardName: /^my-icon\/.*/, // the regex matching artboard that should be exported
-      flatten: '_', // if artboards contain '/' it will be stored in the corresponding folder sturucture, "flatten" just flatten the stucture with a a given char that will replace the '/'
-      sprite: distSpriteFile // output all svg as symbols in a sprite.svg and generage a sprite-demo.html page as well
-    }); 
+module.exports = {
+  input: 'design.sketch', // path of the sketch file relative pwd
+  
+  // support one or more output
+	output: [{
+		type: 'svg', // supports png, svg, jpeg
+		out: 'svg/sprite.svg', // for svg only, if out is a file, it will create a sprite svg
+		artboard: /^ico\/.*/, // only export the artboards that match this regex
+		flatten: '-' // flatten the artboard '/' with '-' char 
+	},
+	{
+		type: 'style', // export the style colors only as css var
+		out: 'pcss/colors.pcss',
+		style: /^clr\/.*/, // only the style that match 
+    group: 2 // "comment group" the style names from their number of path element 
+             // (clr/prime/900 is 3, so, a value of 2 will group all of the clr/prime together )
+	}
+	]
 }
 ```
-
-
