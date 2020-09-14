@@ -6,6 +6,7 @@ import debounce from 'lodash.debounce';
 import minimist, { ParsedArgs } from 'minimist';
 import * as Path from 'path';
 import { Config } from '../config';
+import { downloadOrigin } from '../downloader';
 import { exec } from '../executor';
 
 
@@ -26,29 +27,40 @@ async function run(argv: ParsedArgs) {
 		const conf = await require(modulePath);
 		assertConfig(conf);
 
-		const { input } = conf;
-
-		if (await pathExists(input)) {
-			await exec(conf);
-
-			if (argv.w === true) {
-				const codeWatch = chokidar.watch(input, { depth: 99, ignoreInitial: true, persistent: true });
-				const execFn = () => { return exec(conf) };
-				const execDebounce = debounce(execFn, 200);
-				codeWatch.on('change', execDebounce);
-				codeWatch.on('add', execDebounce);
-			}
+		if (argv._[0] === 'download') {
+			await downloadOrigin(conf);
 		} else {
-			if (conf.warnMissing === true) {
-				console.log(`sketchdev warning - file ${conf.input} not found - doing nothing`);
-			}
+			await runConfig(conf);
 		}
+
 
 	} catch (ex) {
 		console.log(`sketchdev error - Cannot process ${configFile} because: ${ex}`);
 		process.exit(1);
 	}
 
+}
+
+
+async function runConfig(conf: Config) {
+
+	const { input } = conf;
+
+	if (await pathExists(input)) {
+		await exec(conf);
+
+		if (argv.w === true) {
+			const codeWatch = chokidar.watch(input, { depth: 99, ignoreInitial: true, persistent: true });
+			const execFn = () => { return exec(conf) };
+			const execDebounce = debounce(execFn, 200);
+			codeWatch.on('change', execDebounce);
+			codeWatch.on('add', execDebounce);
+		}
+	} else {
+		if (conf.warnMissing === true) {
+			console.log(`sketchdev warning - file ${conf.input} not found - doing nothing`);
+		}
+	}
 }
 
 
@@ -67,3 +79,5 @@ async function findConfig() {
 	}
 	return null;
 }
+
+

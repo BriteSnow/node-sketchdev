@@ -8,12 +8,13 @@ describe('image', async function () {
 
 
 	it('image-ico-svg-sprite', async function () {
-		const distDir = getTestDir(TEST_SKETCH_FILE, this.test?.title!);
+		const distDir = getTestDir(this.test?.title!);
 
 		await saferRemove(distDir);
 
 		await exec({
 			input: TEST_SKETCH_FILE,
+			warnMissing: true,
 			output: {
 				type: 'svg',
 				out: distDir + 'sprite.svg',
@@ -25,7 +26,7 @@ describe('image', async function () {
 	});
 
 	it('image-ico-png', async function () {
-		const distDir = getTestDir(TEST_SKETCH_FILE, this.test?.title!);
+		const distDir = getTestDir(this.test?.title!);
 
 		await saferRemove(distDir);
 
@@ -41,7 +42,7 @@ describe('image', async function () {
 	});
 
 	it('image-ico-svg', async function () {
-		const distDir = getTestDir(TEST_SKETCH_FILE, this.test?.title!);
+		const distDir = getTestDir(this.test?.title!);
 
 		await saferRemove(distDir);
 
@@ -57,7 +58,7 @@ describe('image', async function () {
 	});
 
 	it('image-ico-svg-flatten', async function () {
-		const distDir = getTestDir(TEST_SKETCH_FILE, this.test?.title!);
+		const distDir = getTestDir(this.test?.title!);
 
 		await saferRemove(distDir);
 

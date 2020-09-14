@@ -1,6 +1,6 @@
 {
   "name": "sketchdev",
-  "version": "0.6.0",
+  "version": "0.6.1-SNAPSHOT",
   "description": "Sketchapp utilities to streamline designer/developer workflow (using sketchapp tool chain).",
   "main": "dist/index.js",
   "repository": {
@@ -20,6 +20,7 @@
     "@types/minimist": "^1.2.0",
     "cheerio": "^1.0.0-rc.3",
     "chokidar": "^3.4.2",
+    "follow-redirects": "^1.13.0",
     "fs-extra-plus": "^0.5.19",
     "lodash.debounce": "^4.0.8",
     "minimist": "^1.2.5",
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.21",
+    "@types/follow-redirects": "^1.13.0",
     "@types/mocha": "^8.0.3",
     "@types/yauzl": "^2.9.1",
     "@types/yauzl-promise": "^2.1.0",

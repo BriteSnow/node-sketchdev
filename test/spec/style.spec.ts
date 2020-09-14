@@ -8,7 +8,7 @@ describe('style', async function () {
 
 
 	it('style-simple', async function () {
-		const distDir = getTestDir(TEST_SKETCH_FILE, this.test?.title!);
+		const distDir = getTestDir(this.test?.title!);
 
 		await saferRemove(distDir);
 

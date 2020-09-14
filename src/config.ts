@@ -1,6 +1,7 @@
 
 
 export interface Config {
+	origin?: string; // e.g. https://github.com/jeremychone/codewalk-s1-sketch-files/raw/main/design-quickstart.sketch
 	input: string; // e.g. .design/sketch-file.sketch
 	download?: string; // (download if not present) e.g. https://some.place.com/sketch-file.sketch
 
