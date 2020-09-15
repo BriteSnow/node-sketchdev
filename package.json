@@ -1,6 +1,6 @@
 {
   "name": "sketchdev",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Sketchapp utilities to streamline designer/developer workflow (using sketchapp tool chain).",
   "main": "dist/index.js",
   "repository": {
@@ -24,7 +24,7 @@
     "fs-extra-plus": "^0.5.19",
     "lodash.debounce": "^4.0.8",
     "minimist": "^1.2.5",
-    "p-spawn": "^0.5.4",
+    "p-spawn": "^0.5.5",
     "rimraf": "^3.0.2",
     "utils-min": "^0.1.16",
     "yauzl": "^2.10.0",
