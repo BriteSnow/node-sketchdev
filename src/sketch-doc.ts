@@ -1,11 +1,11 @@
 import FileFormat from '@sketch-hq/sketch-file-format-ts';
 import * as cheerio from 'cheerio';
 import * as fs from 'fs-extra-plus';
-import { mkdirp, pathExists, readFile } from 'fs-extra-plus';
+import { readFile } from 'fs-extra-plus';
 import { spawn } from 'p-spawn';
 import * as Path from 'path';
 import { isEmpty, prune } from 'utils-min';
-import { printGenerated } from './utils';
+import { writeToFile } from './utils';
 import { TOOL_PATH } from './vals';
 import { ZipFile } from './zip-file';
 
@@ -153,13 +153,10 @@ export class SketchDoc {
 		}
 
 		css += '}\n';
+
+
 		//// write
-
-		const dir = Path.dirname(opts.outFile);
-		await mkdirp(dir);
-		await fs.writeFile(opts.outFile, css);
-		printGenerated('style', opts.outFile);
-
+		await writeToFile('style', opts.outFile, css);
 	}
 }
 
@@ -415,20 +412,14 @@ async function processSprite(svgDir: string, opts: { out: string }) {
 
 	// write the sprite svg
 	const contentStr = content.join("\n");
+	await writeToFile('svg', opts.out, contentStr);
 
-	await fs.writeFile(opts.out, contentStr);
-	printGenerated('svg', opts.out);
 
 	// copy the template file
 	const fromDemoPath = Path.join(__dirname, "../template-demo.html");
 	const toDemoPath = Path.join(outInfo.dir, outInfo.name + "-demo.html");
-	const toDemoContent = (await pathExists(toDemoPath)) ? await readFile(toDemoPath, 'utf-8') : null;
-	const toCreateDemo = toDemoContent == null ?? (toDemoContent !== (await readFile(toDemoPath, 'utf-8')));
-	if (toCreateDemo) {
-		await fs.copy(fromDemoPath, toDemoPath);
-		printGenerated('demo-html', toDemoPath);
-	}
-
+	const htmlContent = await readFile(fromDemoPath, 'utf-8');
+	await writeToFile('demo-html', toDemoPath, htmlContent);
 }
 // --------- /Mobule Methods --------- //
 
