@@ -1,22 +1,33 @@
+import { pathExists } from 'fs-extra-plus';
 import { asArray } from 'utils-min';
 import { Config, ImageOutput, Output, StyleOutput } from './config';
+import { downloadOrigin } from './downloader';
 import { sketchDoc, SketchDoc } from './sketch-doc';
-import { hasSketchApp } from './utils';
+import { hasLogLevel, hasSketchApp, NamedError } from './utils';
 import { TOOL_PATH } from './vals';
 
+export const ERROR_INPUT_NOT_FOUND = 'ERROR_INPUT_NOT_FOUND';
 
 export async function exec(config: Config) {
 
-	const doc = sketchDoc(config.input);
-
-	const outputs: Output[] = asArray(config.output);
-
 	if (!(await hasSketchApp())) {
-		if (config.warnMissing === true) {
+		if (hasLogLevel(config, 'warning')) {
 			console.log(`sketchdev warning - sketchapp tooling ${TOOL_PATH} not found - doing nothing`);
 		}
 		return;
 	}
+
+	if (config.download === true && !(await pathExists(config.input))) {
+		downloadOrigin(config, false);
+	}
+
+	if ((!await pathExists(config.input))) {
+		throw new NamedError('ERROR_INPUT_NOT_FOUND');
+	}
+
+	const outputs: Output[] = asArray(config.output);
+
+	const doc = sketchDoc(config.input);
 
 	for (const output of outputs) {
 		if (output.type === 'style') {

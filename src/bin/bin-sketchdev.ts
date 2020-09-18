@@ -7,7 +7,8 @@ import minimist, { ParsedArgs } from 'minimist';
 import * as Path from 'path';
 import { Config } from '../config';
 import { downloadOrigin } from '../downloader';
-import { exec } from '../executor';
+import { ERROR_INPUT_NOT_FOUND, exec } from '../executor';
+import { hasLogLevel } from '../utils';
 
 
 const argv = minimist(process.argv.slice(2), { '--': true });
@@ -46,7 +47,8 @@ async function runConfig(conf: Config) {
 
 	const { input } = conf;
 
-	if (await pathExists(input)) {
+
+	try {
 		await exec(conf);
 
 		if (argv.w === true) {
@@ -56,9 +58,13 @@ async function runConfig(conf: Config) {
 			codeWatch.on('change', execDebounce);
 			codeWatch.on('add', execDebounce);
 		}
-	} else {
-		if (conf.warnMissing === true) {
-			console.log(`sketchdev warning - file ${conf.input} not found - doing nothing`);
+	} catch (ex) {
+		if (ex.name === ERROR_INPUT_NOT_FOUND) {
+			if (hasLogLevel(conf, 'warning')) {
+				console.log(`sketchdev warning - file ${conf.input} not found - doing nothing`);
+			}
+		} else {
+			console.log(`sketchdev error - ${ex.message}`);
 		}
 	}
 }

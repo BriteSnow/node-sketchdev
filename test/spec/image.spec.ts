@@ -14,13 +14,13 @@ describe('image', async function () {
 
 		await exec({
 			input: TEST_SKETCH_FILE,
-			warnMissing: true,
 			output: {
 				type: 'svg',
 				out: distDir + 'sprite.svg',
 				artboard: /^ico\/.*/,
 				flatten: '-'
-			}
+			},
+			log: 'warning'
 		});
 
 	});
