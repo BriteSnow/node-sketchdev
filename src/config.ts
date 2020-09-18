@@ -1,13 +1,19 @@
 
+export type LogLevel = 'error' | 'warning' | 'info';
 
 export interface Config {
+	/**
+	 * If true, will download on sketchdev command if the input is not present and the OS has SketchApp installed
+	 * default false, meaning user has to run "npm run sketchdev download" to explicitly download it
+	 */
+	download?: boolean;
 	origin?: string; // e.g. https://github.com/jeremychone/codewalk-s1-sketch-files/raw/main/design-quickstart.sketch
 	input: string; // e.g. .design/sketch-file.sketch
-	download?: string; // (download if not present) e.g. https://some.place.com/sketch-file.sketch
 
 	output: Output | Output[];
 
-	warnMissing?: boolean; // warn if missing file (otherwise silent)
+	/** (default error) (warnings are missing files/app which will do noting) */
+	log?: LogLevel;
 }
 
 export type Output = ImageOutput | StyleOutput;

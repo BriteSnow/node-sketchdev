@@ -7,14 +7,14 @@ import * as Path from 'path';
 import { Config } from './config';
 
 
-export async function downloadOrigin(config: Config) {
+export async function downloadOrigin(config: Config, showInfo = true) {
 	const { input, origin } = config;
 	if (origin == null) {
 		throw new Error(`sketchdev warning - cannot download origin (not defined ${origin})`);
 	}
 
 	try {
-		await downloadFile(origin, input);
+		await downloadFile(origin, input, showInfo);
 	} catch (ex) {
 		throw ex;
 	}
@@ -22,12 +22,15 @@ export async function downloadOrigin(config: Config) {
 	return true;
 }
 
-async function downloadFile(httpSrc: string, localFile: string) {
+async function downloadFile(httpSrc: string, localFile: string, showInfo: boolean) {
 	const localFileInfo = Path.parse(localFile);
 	const tmpFile = Path.join(localFileInfo.dir, `${localFileInfo.name}-download-${Date.now()}${localFileInfo.ext}`);
 
 	if (await pathExists(localFile)) {
-		console.log(`sketchdev info - File ${localFile} already exists. Nothing to do. (delete file to redownload)`);
+		if (showInfo) {
+			console.log(`sketchdev info - File ${localFile} already exists. Nothing to do. (delete file to redownload)`);
+		}
+
 		return false;
 	}
 
