@@ -18,7 +18,7 @@ export async function exec(config: Config) {
 	}
 
 	if (config.download === true && !(await pathExists(config.input))) {
-		downloadOrigin(config, false);
+		await downloadOrigin(config, false);
 	}
 
 	if ((!await pathExists(config.input))) {
