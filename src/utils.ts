@@ -3,7 +3,7 @@ import * as Path from 'path';
 import { Config, LogLevel } from './config';
 import { TOOL_PATH } from './vals';
 
-type WriteType = 'demo-html' | 'png' | 'jpeg' | 'svg' | 'style';
+type WriteType = 'demo-html' | 'png' | 'jpeg' | 'svg' | 'color' | 'style';
 
 
 export class NamedError extends Error {
@@ -55,3 +55,91 @@ export function hasLogLevel(conf: Config, level: LogLevel) {
 	const levelIdx = levels.indexOf(level);
 	return (levelIdx <= confLevelIdx);
 }
+
+
+
+
+
+//#region    ---------- naming utils ---------- 
+export type ProcessNameOptions = {
+	flatten?: string | null,
+	replace?: [RegExp, string],
+	cssVar?: boolean
+};
+
+/** Process a name given the otpional replace and flatten rules */
+export function processName(name: string, opts?: ProcessNameOptions) {
+
+	// first the RegEx
+	if (opts?.replace) {
+		name = name.replace(opts.replace[0], opts.replace[1]);
+	}
+
+	// then flatten (if undefined, still default, but if null, then, no flatten)
+	if (opts?.flatten || opts?.flatten === undefined) {
+		const delim = opts?.flatten ?? '-';
+		name = flatten(name, delim);
+	}
+
+	if (opts?.cssVar) {
+		name = name.replace(/[^\S]/gi, '')
+		name = name.replace(/[^0-9a-z\-_]/gi, '_')
+	}
+
+	return name;
+}
+
+type MatchRule = (string | RegExp);
+
+export function match(nameOrRgx: MatchRule | MatchRule[] | undefined | null, value: string): boolean {
+	// if no nameOrRgx, then, we match it.
+	if (nameOrRgx == null) return true;
+
+	const rules = Array.isArray(nameOrRgx) ? nameOrRgx : [nameOrRgx];
+
+	for (const rule of rules) {
+
+		// succeed on first match
+		if (typeof rule === 'string' && value.startsWith(rule)) {
+			return true;
+		} else if (value.match(rule)) {
+			return true;
+		}
+	}
+
+	return false;
+
+}
+
+export function flatten(value: string, delim: string) {
+	return value.replace(/\//gi, delim);
+}
+//#endregion ---------- /naming utils ---------- 
+
+
+//#region    ---------- color utils ---------- 
+export type WebColor = {
+	rgba: string,
+	hex: string,
+	hasOpacity: boolean,
+	auto: string, // hex if no opacity (alpha == 1), rgba if has some opacity
+}
+export function getWebColor(vals: [number, number, number, number]): WebColor {
+	const [rNum, gNum, bNum, aNum] = vals; // this is the 0 to 1 values
+	const [r, g, b] = [Math.round(rNum * 255), Math.round(gNum * 255), Math.round(bNum * 255)];
+	const a = Math.round((aNum + Number.EPSILON) * 100) / 100;
+	const rgba = `rgba(${r}, ${g}, ${b}, ${a})`;
+	const hex = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+	const hasOpacity = (a !== 1);
+	const auto = (hasOpacity) ? rgba : hex;
+	return { rgba, hex, hasOpacity, auto };
+}
+
+export function toHex(num: number): string {
+	return num.toString(16).toUpperCase().padStart(2, '0');
+}
+//#endregion ---------- /color utils ----------
+
+
+
+

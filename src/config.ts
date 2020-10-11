@@ -16,7 +16,7 @@ export interface Config {
 	log?: LogLevel;
 }
 
-export type Output = ImageOutput | StyleOutput;
+export type Output = ImageOutput | ColorOutput | StyleOutput;
 
 export interface ImageOutput {
 	type: 'png' | 'jpeg' | 'svg',
@@ -31,4 +31,17 @@ export interface StyleOutput {
 	style: string | RegExp, // maching style names 
 	group?: number, //  e.g., 2 - to group as fill/prime/
 	ref?: string[], // reference style to come first e.g., ['fill/prime', 'fill/gray', 'fill/second']
+}
+// TODO: 
+// cssScope ?: string; // default 'root' which put the var in the ':root{...}' but can be another name or selecctor
+// replace ?: [RegExp, string]; // transformation on the name
+
+
+export interface ColorOutput {
+	type: 'color',
+	out: string, // dir or file were to put the pcss
+	name?: string | RegExp, // maching color
+	group?: number, //  e.g., 2 - to group as fill/prime/
+	ref?: string[], // reference name to come first e.g., ['fill/prime', 'fill/gray', 'fill/second']
+	prefix?: string // css var prefix to be added to each variable e.g., 'color-'
 }

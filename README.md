@@ -7,6 +7,11 @@ This extension uses [sketchapp tool chain](https://developer.sketch.com/cli/).
 
 ## Changelog
 
+- **0.6.1 - 0.6.5** Oct 7, 2020
+  - `+` (big one) Add support for new Sketch Color Variables !!! (replace the current style export)
+  	- See [Sketch Color Variables Intro (youtube)](https://www.youtube.com/watch?v=3_dvCpetsgc)
+  - `+` Added download original and download flag (to automatically download origin)
+  - `^` Save file .css and .svg only if content changed	
 - **0.6.0** Sep 13, 2020
   - `!` Major refactor, now `sketchdev.config.js` driven. 
 
@@ -34,11 +39,14 @@ module.exports = {
 		flatten: '-' // flatten the artboard '/' with '-' char 
 	},
 	{
-		type: 'style', // export the style colors only as css var
+		type: 'color', // export the color variables as css var
 		out: 'pcss/colors.pcss',
-		style: /^clr\/.*/, // only the style that match 
-    group: 2 // "comment group" the style names from their number of path element 
-             // (clr/prime/900 is 3, so, a value of 2 will group all of the clr/prime together )
+		name: /^txt\/.*/, // (optional) only the color variables that match txt
+    group: 1, // (optional) "comment group" the style names from their number of path element 
+							// (prime/900 is 2, so, a value o1 2 will group all of the prime/* 
+							// together )
+		prefix: 'clr-', // (optional) prefix for the css var names
+		ref: ['gray','prime'] // (optional)  define the reference colors that others will use if match
 	}
 	]
 }

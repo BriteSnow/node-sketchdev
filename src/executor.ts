@@ -1,7 +1,9 @@
 import { pathExists } from 'fs-extra-plus';
 import { asArray } from 'utils-min';
-import { Config, ImageOutput, Output, StyleOutput } from './config';
+import { Config, ImageOutput, Output } from './config';
 import { downloadOrigin } from './downloader';
+import { exportColors } from './export-color';
+import { exportStyles } from './export-style';
 import { sketchDoc, SketchDoc } from './sketch-doc';
 import { hasLogLevel, hasSketchApp, NamedError } from './utils';
 import { TOOL_PATH } from './vals';
@@ -31,7 +33,9 @@ export async function exec(config: Config) {
 
 	for (const output of outputs) {
 		if (output.type === 'style') {
-			await execStyleOutput(doc, output);
+			await exportStyles(doc, output);
+		} else if (output.type == 'color') {
+			await exportColors(doc, output);
 		} else {
 			await execImageOutput(doc, output);
 		}
@@ -52,14 +56,4 @@ async function execImageOutput(doc: SketchDoc, output: ImageOutput) {
 	});
 }
 
-async function execStyleOutput(doc: SketchDoc, output: StyleOutput) {
-	const { out, style, group, ref } = output;
-
-	await doc.exportStyles({
-		outFile: out,
-		styleName: style,
-		group,
-		ref
-	})
-}
 
