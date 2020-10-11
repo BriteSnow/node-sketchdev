@@ -7,7 +7,7 @@ This extension uses [sketchapp tool chain](https://developer.sketch.com/cli/).
 
 ## Changelog
 
-- **0.6.1 - 0.6.5** Oct 7, 2020
+- **0.6.1 - 0.6.5** Oct 11, 2020
   - `+` (big one) Add support for new Sketch Color Variables !!! (replace the current style export)
   	- See [Sketch Color Variables Intro (youtube)](https://www.youtube.com/watch?v=3_dvCpetsgc)
   - `+` Added download original and download flag (to automatically download origin)
