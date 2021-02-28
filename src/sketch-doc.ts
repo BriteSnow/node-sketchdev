@@ -178,7 +178,7 @@ async function exportFn(svgFile: string, _opts: ExportArtboardsOptions) {
 		// if we have a opts.flatten option, the output is opts.out + "_tmp/"
 		let sketchExportDir = outDir;
 		if (flatten || spriteFile) {
-			sketchExportDir = outDir + ".tmp/";
+			sketchExportDir = Path.join(outDir, "/.tmp/");
 		}
 		args.push('--output=' + sketchExportDir);
 
@@ -197,6 +197,7 @@ async function exportFn(svgFile: string, _opts: ExportArtboardsOptions) {
 		if (flatten) {
 			const svgsGlob = Path.join(sketchExportDir, '/**/*.svg');
 			const svgFiles = await fs.glob(svgsGlob);
+
 			const flattenDir = spriteFile ? sketchExportDir : outDir;
 
 			for (svgFile of svgFiles) {
@@ -219,7 +220,7 @@ async function exportFn(svgFile: string, _opts: ExportArtboardsOptions) {
 
 		// remove te sketchExportDir if it was a temporary one
 		if (sketchExportDir !== outDir) {
-			await fs.saferRemove(sketchExportDir)
+			await fs.saferRemove(sketchExportDir);
 		}
 	} catch (ex) {
 		console.log("ERROR while exporting\n", ex);
@@ -283,8 +284,7 @@ const cheerioXmlOpts = {
 // opts.out: the svg file to be created
 // opts.trims: (not supported yet, trim 'fill attribute') array of string for each property that need to be trimmed
 async function processSprite(svgDir: string, opts: { out: string }) {
-	const svgFiles = await fs.glob(`${svgDir}/*.svg`);
-
+	const svgFiles = await fs.glob(Path.join(svgDir, '/*.svg'));
 	const content = ['<svg xmlns="http://www.w3.org/2000/svg" style="width:0; height:0; visibility:hidden; display:none">'];
 	const symbols = [];
 

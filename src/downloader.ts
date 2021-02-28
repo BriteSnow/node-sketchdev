@@ -37,7 +37,7 @@ async function downloadFile(httpSrc: string, localFile: string, showInfo: boolea
 	await mkdirs(localFileInfo.dir);
 	const fileWStream = createWriteStream(tmpFile);
 
-	return new Promise(async (res, rej) => {
+	return new Promise<void>(async (res, rej) => {
 		try {
 			const request = https.get(httpSrc, function (response) {
 				response.pipe(fileWStream);
