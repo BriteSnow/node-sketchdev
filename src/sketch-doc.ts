@@ -285,7 +285,7 @@ const cheerioXmlOpts = {
 // opts.trims: (not supported yet, trim 'fill attribute') array of string for each property that need to be trimmed
 async function processSprite(svgDir: string, opts: { out: string }) {
 	const svgFiles = await fs.glob(Path.join(svgDir, '/*.svg'));
-	const content = ['<svg xmlns="http://www.w3.org/2000/svg" style="width:0; height:0; visibility:hidden; display:none">'];
+	const content = ['<svg xmlns="http://www.w3.org/2000/svg">'];
 	const symbols = [];
 
 
