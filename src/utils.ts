@@ -3,7 +3,7 @@ import * as Path from 'path';
 import { Config, LogLevel } from './config';
 import { TOOL_PATH } from './vals';
 
-type WriteType = 'demo-html' | 'png' | 'jpeg' | 'svg' | 'color' | 'style';
+export type WriteType = 'demo-html' | 'demo-js' | 'demo-css' | 'png' | 'jpeg' | 'svg' | 'color' | 'style';
 
 
 export class NamedError extends Error {

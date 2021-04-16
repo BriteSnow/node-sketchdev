@@ -46,7 +46,9 @@
   "files": [
     "src/",
     "dist/",
-    "template-demo.html"
+    "template-demo.html",
+    "template-demo.css",
+    "template-demo.js"
   ],
   "scripts": {
     "test": "TS_NODE_FILES=true ./node_modules/.bin/mocha -p ./test/tsconfig.json",

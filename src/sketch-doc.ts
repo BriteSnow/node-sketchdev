@@ -5,7 +5,7 @@ import { readFile } from 'fs-extra-plus';
 import { spawn } from 'p-spawn';
 import * as Path from 'path';
 import { isEmpty, prune } from 'utils-min';
-import { match, processName, writeToFile } from './utils';
+import { match, processName, writeToFile, WriteType } from './utils';
 import { TOOL_PATH } from './vals';
 import { ZipFile } from './zip-file';
 
@@ -341,10 +341,15 @@ async function processSprite(svgDir: string, opts: { out: string }) {
 
 
 	// copy the template file
-	const fromDemoPath = Path.join(__dirname, "../template-demo.html");
-	const toDemoPath = Path.join(outInfo.dir, outInfo.name + "-demo.html");
+	await writeDemoFile('demo-html', 'template-demo.html', Path.join(outInfo.dir, outInfo.name + "-demo.html"));
+	await writeDemoFile('demo-js', 'template-demo.js', Path.join(outInfo.dir, "sprite-demo.js")); // for now, html hardcode to sprite-..
+	await writeDemoFile('demo-css', 'template-demo.css', Path.join(outInfo.dir, "sprite-demo.css")); // for now, html hardcode to sprite-...
+}
+
+async function writeDemoFile(writeType: WriteType, demoFile: string, distFile: string) {
+	const fromDemoPath = Path.join(__dirname, "../" + demoFile);
 	const htmlContent = await readFile(fromDemoPath, 'utf-8');
-	await writeToFile('demo-html', toDemoPath, htmlContent);
+	await writeToFile(writeType, distFile, htmlContent);
 }
 // --------- /Mobule Methods --------- //
 
