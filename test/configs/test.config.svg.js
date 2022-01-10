@@ -1,6 +1,6 @@
 
 
-module.exports = {
+export default {
 	input: 'test/.samples/sample-sketch.sketch',
 	output: {
 		type: 'svg',

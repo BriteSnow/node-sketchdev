@@ -58,7 +58,7 @@ async function runConfig(conf: Config) {
 			codeWatch.on('change', execDebounce);
 			codeWatch.on('add', execDebounce);
 		}
-	} catch (ex) {
+	} catch (ex: any) {
 		if (ex.name === ERROR_INPUT_NOT_FOUND) {
 			if (hasLogLevel(conf, 'warning')) {
 				console.log(`sketchdev warning - file ${conf.input} not found - doing nothing`);

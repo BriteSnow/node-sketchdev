@@ -7,8 +7,8 @@
 		// Good for nodejs
 		"target": "es2019",
 
-		// For now, static with commonjs.
-		"module": "commonjs",
+		// Not for type: module (ESM only)
+		"module": "ESNext",
 
 		// This is important to support 3rd party modules that are still in a node.js/commonjs way
 		"moduleResolution": "node", 
