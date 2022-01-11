@@ -1,3 +1,5 @@
+> Note: Requires `"type": "module"` (i.e., ESM module)
+
 ## Intro
 
 Command line (with API available) node module that generate html assets (.svg, .png, .jpeg, .css) from [sketch.app](https://www.sketch.com/) application.

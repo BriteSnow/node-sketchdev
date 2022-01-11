@@ -1,6 +1,6 @@
-import { ColorOutput } from './config';
-import { SketchDoc } from './sketch-doc';
-import { getWebColor, match, processName, WebColor, writeToFile } from './utils';
+import { ColorOutput } from './config.js';
+import { SketchDoc } from './sketch-doc.js';
+import { getWebColor, match, processName, WebColor, writeToFile } from './utils.js';
 
 
 type CssColorVar = { name: string, webColor: WebColor, isRef: boolean, group?: string };

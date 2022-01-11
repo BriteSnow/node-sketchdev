@@ -1,10 +1,11 @@
 
 
 
-import { https } from 'follow-redirects';
-import { createWriteStream, mkdirs, pathExists, rename, saferRemove } from 'fs-extra-plus';
+import { saferRemove } from 'fs-extra-plus';
 import * as Path from 'path';
-import { Config } from './config';
+import { Config } from './config.js';
+const { https } = (await import('follow-redirects')).default;
+const { createWriteStream, mkdirs, pathExists, rename, } = (await import('fs-extra')).default;
 
 
 export async function downloadOrigin(config: Config, showInfo = true) {

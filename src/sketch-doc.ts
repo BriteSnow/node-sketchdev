@@ -1,13 +1,15 @@
 import FileFormat from '@sketch-hq/sketch-file-format-ts';
 import * as cheerio from 'cheerio';
-import * as fs from 'fs-extra-plus';
-import { readFile } from 'fs-extra-plus';
+import { glob, saferRemove } from 'fs-extra-plus';
 import { spawn } from 'p-spawn';
 import * as Path from 'path';
+import { URL } from 'url'; // in Browser, the URL in native accessible on window
 import { isEmpty, prune } from 'utils-min';
-import { match, processName, writeToFile, WriteType } from './utils';
-import { TOOL_PATH } from './vals';
-import { ZipFile } from './zip-file';
+import { match, processName, writeToFile, WriteType } from './utils.js';
+import { TOOL_PATH } from './vals.js';
+import { ZipFile } from './zip-file.js';
+
+const { readFile, copy, mkdirs } = (await import('fs-extra')).default;
 
 
 // Sketch Doc: https://developer.sketch.com/cli/
@@ -196,7 +198,7 @@ async function exportFn(svgFile: string, _opts: ExportArtboardsOptions) {
 		// and flatten the name
 		if (flatten) {
 			const svgsGlob = Path.join(sketchExportDir, '/**/*.svg');
-			const svgFiles = await fs.glob(svgsGlob);
+			const svgFiles = await glob(svgsGlob);
 
 			const flattenDir = spriteFile ? sketchExportDir : outDir;
 
@@ -210,7 +212,7 @@ async function exportFn(svgFile: string, _opts: ExportArtboardsOptions) {
 
 				let to = Path.join(flattenDir, name + ".svg");
 
-				await fs.copy(svgFile, to);
+				await copy(svgFile, to);
 			}
 		}
 
@@ -220,7 +222,7 @@ async function exportFn(svgFile: string, _opts: ExportArtboardsOptions) {
 
 		// remove te sketchExportDir if it was a temporary one
 		if (sketchExportDir !== outDir) {
-			await fs.saferRemove(sketchExportDir);
+			await saferRemove(sketchExportDir);
 		}
 	} catch (ex) {
 		console.log("ERROR while exporting\n", ex);
@@ -284,13 +286,13 @@ const cheerioXmlOpts = {
 // opts.out: the svg file to be created
 // opts.trims: (not supported yet, trim 'fill attribute') array of string for each property that need to be trimmed
 async function processSprite(svgDir: string, opts: { out: string }) {
-	const svgFiles = await fs.glob(Path.join(svgDir, '/*.svg'));
+	const svgFiles = await glob(Path.join(svgDir, '/*.svg'));
 	const content = ['<svg xmlns="http://www.w3.org/2000/svg">'];
 	const symbols = [];
 
 
 	for (let file of svgFiles) {
-		let fileContent = await fs.readFile(file, 'utf8');
+		let fileContent = await readFile(file, 'utf8');
 
 		let fileInfo = Path.parse(file);
 
@@ -333,7 +335,7 @@ async function processSprite(svgDir: string, opts: { out: string }) {
 
 	const outInfo = Path.parse(opts.out);
 	// create the sprite folder
-	await fs.mkdirs(outInfo.dir);
+	await mkdirs(outInfo.dir);
 
 	// write the sprite svg
 	const contentStr = content.join("\n");
@@ -347,10 +349,11 @@ async function processSprite(svgDir: string, opts: { out: string }) {
 }
 
 async function writeDemoFile(writeType: WriteType, demoFile: string, distFile: string) {
+	const __dirname = new URL('.', import.meta.url).pathname;
+	// see: https://stackoverflow.com/a/66651120/686724
 	const fromDemoPath = Path.join(__dirname, "../" + demoFile);
 	const htmlContent = await readFile(fromDemoPath, 'utf-8');
 	await writeToFile(writeType, distFile, htmlContent);
 }
 // --------- /Mobule Methods --------- //
-
 

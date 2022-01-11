@@ -1,12 +1,12 @@
-import { pathExists } from 'fs-extra-plus';
 import { asArray } from 'utils-min';
-import { Config, ImageOutput, Output } from './config';
-import { downloadOrigin } from './downloader';
-import { exportColors } from './export-color';
-import { exportStyles } from './export-style';
-import { sketchDoc, SketchDoc } from './sketch-doc';
-import { hasLogLevel, hasSketchApp, NamedError } from './utils';
-import { TOOL_PATH } from './vals';
+import { Config, ImageOutput, Output } from './config.js';
+import { downloadOrigin } from './downloader.js';
+import { exportColors } from './export-color.js';
+import { exportStyles } from './export-style.js';
+import { sketchDoc, SketchDoc } from './sketch-doc.js';
+import { hasLogLevel, hasSketchApp, NamedError } from './utils.js';
+import { TOOL_PATH } from './vals.js';
+const { pathExists } = (await import('fs-extra')).default;
 
 export const ERROR_INPUT_NOT_FOUND = 'ERROR_INPUT_NOT_FOUND';
 
@@ -55,5 +55,4 @@ async function execImageOutput(doc: SketchDoc, output: ImageOutput) {
 		flatten
 	});
 }
-
 

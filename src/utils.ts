@@ -1,7 +1,7 @@
-import { mkdirp, pathExists, readFile, writeFile } from 'fs-extra-plus';
 import * as Path from 'path';
-import { Config, LogLevel } from './config';
-import { TOOL_PATH } from './vals';
+import { Config, LogLevel } from './config.js';
+import { TOOL_PATH } from './vals.js';
+const { mkdirp, pathExists, readFile, writeFile } = (await import('fs-extra')).default;
 
 export type WriteType = 'demo-html' | 'demo-js' | 'demo-css' | 'png' | 'jpeg' | 'svg' | 'color' | 'style';
 
@@ -139,7 +139,6 @@ export function toHex(num: number): string {
 	return num.toString(16).toUpperCase().padStart(2, '0');
 }
 //#endregion ---------- /color utils ----------
-
 
 
 

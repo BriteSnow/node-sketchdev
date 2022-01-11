@@ -5,10 +5,10 @@ import { pathExists } from 'fs-extra-plus';
 import debounce from 'lodash.debounce';
 import minimist, { ParsedArgs } from 'minimist';
 import * as Path from 'path';
-import { Config } from '../config';
-import { downloadOrigin } from '../downloader';
-import { ERROR_INPUT_NOT_FOUND, exec } from '../executor';
-import { hasLogLevel } from '../utils';
+import { Config } from '../config.js';
+import { downloadOrigin } from '../downloader.js';
+import { ERROR_INPUT_NOT_FOUND, exec } from '../executor.js';
+import { hasLogLevel } from '../utils.js';
 
 
 const argv = minimist(process.argv.slice(2), { '--': true });
@@ -85,5 +85,4 @@ async function findConfig() {
 	}
 	return null;
 }
-
 

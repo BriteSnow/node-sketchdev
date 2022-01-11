@@ -1,8 +1,10 @@
+ // IMPORTANT - This is NOT used in the context of mocha (otherwise uncaught exception)
+ //             Just to be able to do a tsc and make sure all compiles correctly
  {
 	"compilerOptions": {
 		"target": "ES2019",
 
-		"module": "commonjs",
+		"module": "ESNext",
 
 		"moduleResolution": "node", 
 		

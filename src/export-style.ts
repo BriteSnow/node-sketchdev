@@ -1,6 +1,6 @@
-import { StyleOutput } from './config';
-import { SketchDoc } from './sketch-doc';
-import { getWebColor, match, processName, writeToFile } from './utils';
+import { StyleOutput } from './config.js';
+import { SketchDoc } from './sketch-doc.js';
+import { getWebColor, match, processName, writeToFile } from './utils.js';
 
 
 export async function exportStyles(doc: SketchDoc, output: StyleOutput) {

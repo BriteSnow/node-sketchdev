@@ -1,6 +1,6 @@
 import { saferRemove } from 'fs-extra-plus';
-import { exec } from '../../src/executor';
-import { getTestDir, TEST_SKETCH_FILE } from '../test-utils';
+import { exec } from '../../src/executor.js';
+import { getTestDir, TEST_SKETCH_FILE } from '../test-utils.js';
 
 
 
