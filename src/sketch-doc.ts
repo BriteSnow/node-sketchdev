@@ -3,7 +3,7 @@ import * as cheerio from 'cheerio';
 import { glob, saferRemove } from 'fs-extra-plus';
 import { spawn } from 'p-spawn';
 import * as Path from 'path';
-import { URL } from 'url'; // in Browser, the URL in native accessible on window
+import { URL } from 'url'; // for dirname
 import { isEmpty, prune } from 'utils-min';
 import { match, processName, writeToFile, WriteType } from './utils.js';
 import { TOOL_PATH } from './vals.js';

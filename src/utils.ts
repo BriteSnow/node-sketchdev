@@ -31,6 +31,8 @@ export async function writeToFile(type: WriteType, file: string, content: string
 	if (doWrite) {
 		await writeFile(file, content);
 		await printWriteInfo(type, file);
+	} else {
+		console.log(`sketchdev - Skipping (same content) - ${file}`);
 	}
 }
 
