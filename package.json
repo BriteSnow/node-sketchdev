@@ -1,7 +1,7 @@
 {
   "name": "sketchdev",
   "type": "module",
-  "version": "0.7.1-SNAPSHOT",
+  "version": "0.7.1",
   "description": "Sketchapp utilities to streamline designer/developer workflow (using sketchapp tool chain).",
   "main": "dist/index.js",
   "repository": {
