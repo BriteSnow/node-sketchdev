@@ -1,4 +1,4 @@
-import { saferRemove } from 'fs-extra-plus';
+import { saferRemove } from 'fs-aux';
 import { exec } from '../../src/executor.js';
 import { getTestDir, TEST_SKETCH_FILE } from '../test-utils.js';
 

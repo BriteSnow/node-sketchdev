@@ -1,11 +1,10 @@
-
-
-
-import { saferRemove } from 'fs-extra-plus';
+import { createWriteStream } from 'fs';
+import { pathExists, saferRemove } from 'fs-aux';
+import { mkdir, rename } from 'fs/promises';
 import * as Path from 'path';
 import { Config } from './config.js';
 const { https } = (await import('follow-redirects')).default;
-const { createWriteStream, mkdirs, pathExists, rename, } = (await import('fs-extra')).default;
+
 
 
 export async function downloadOrigin(config: Config, showInfo = true) {
@@ -35,7 +34,7 @@ async function downloadFile(httpSrc: string, localFile: string, showInfo: boolea
 		return false;
 	}
 
-	await mkdirs(localFileInfo.dir);
+	await mkdir(localFileInfo.dir, { recursive: true });
 	const fileWStream = createWriteStream(tmpFile);
 
 	return new Promise<void>(async (res, rej) => {

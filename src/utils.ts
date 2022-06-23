@@ -1,7 +1,9 @@
+import { pathExists } from 'fs-aux';
+import { mkdir, readFile, writeFile } from 'fs/promises';
 import * as Path from 'path';
 import { Config, LogLevel } from './config.js';
 import { TOOL_PATH } from './vals.js';
-const { mkdirp, pathExists, readFile, writeFile } = (await import('fs-extra')).default;
+
 
 export type WriteType = 'demo-html' | 'demo-js' | 'demo-css' | 'png' | 'jpeg' | 'svg' | 'color' | 'style';
 
@@ -15,7 +17,7 @@ export class NamedError extends Error {
 
 export async function writeToFile(type: WriteType, file: string, content: string, onlyIfChanged = true) {
 	const dir = Path.dirname(file);
-	await mkdirp(dir);
+	await mkdir(dir, { recursive: true });
 
 	let doWrite = true;
 

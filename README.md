@@ -9,9 +9,13 @@ This extension uses [sketchapp tool chain](https://developer.sketch.com/cli/).
 
 ## Changelog
 
+- **0.7.2** Jan 23, 2022
+  - `.` update dependencies
+- **0.7.0 - 0.7.1** Jan 10, 2022
+  - `!` update to ESM module
 - **0.6.1 - 0.6.5** Oct 11, 2020
   - `+` (big one) Add support for new Sketch Color Variables !!! (replace the current style export)
-  	- See [Sketch Color Variables Intro (youtube)](https://www.youtube.com/watch?v=3_dvCpetsgc)
+  - See [Sketch Color Variables Intro (youtube)](https://www.youtube.com/watch?v=3_dvCpetsgc)
   - `+` Added download original and download flag (to automatically download origin)
   - `^` Save file .css and .svg only if content changed	
 - **0.6.0** Sep 13, 2020

@@ -1,30 +1,23 @@
 {
   "name": "sketchdev",
   "type": "module",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Sketchapp utilities to streamline designer/developer workflow (using sketchapp tool chain).",
   "main": "dist/index.js",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/BriteSnow/node-sketchdev.git"
+  "scripts": {
+    "test": "./node_modules/.bin/mocha",
+    "prepack": "node_modules/.bin/rimraf ./dist && ./node_modules/.bin/tsc"
   },
-  "keyword": [
-    "sketchapp",
-    "sketch",
-    "svg",
-    "symbols",
-    "sprite"
-  ],
   "dependencies": {
-    "@sketch-hq/sketch-file-format-ts": "^6.2.0",
-    "@types/lodash.debounce": "^4.0.6",
+    "@sketch-hq/sketch-file-format-ts": "^6.2.1",
+    "@types/lodash.debounce": "^4.0.7",
     "@types/minimist": "^1.2.2",
-    "cheerio": "^1.0.0-rc.10",
-    "chokidar": "^3.5.2",
-    "follow-redirects": "^1.14.7",
-    "fs-extra-plus": "^0.6.0",
+    "cheerio": "^1.0.0-rc.11",
+    "chokidar": "^3.5.3",
+    "follow-redirects": "^1.15.1",
+    "fs-aux": "^0.1.0",
     "lodash.debounce": "^4.0.8",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "p-spawn": "^0.5.5",
     "rimraf": "^3.0.2",
     "utils-min": "^0.2.0",
@@ -32,14 +25,14 @@
     "yauzl-promise": "^2.1.3"
   },
   "devDependencies": {
-    "@types/cheerio": "^0.22.30",
-    "@types/follow-redirects": "^1.13.1",
-    "@types/mocha": "^9.0.0",
-    "@types/yauzl": "^2.9.2",
+    "@types/cheerio": "^0.22.31",
+    "@types/follow-redirects": "^1.14.1",
+    "@types/mocha": "^9.1.1",
+    "@types/yauzl": "^2.10.0",
     "@types/yauzl-promise": "^2.1.0",
-    "mocha": "^9.1.3",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.5.4"
+    "mocha": "^10.0.0",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.4"
   },
   "bin": {
     "sketchdev": "./dist/bin/bin-sketchdev.js"
@@ -51,15 +44,22 @@
     "template-demo.css",
     "template-demo.js"
   ],
-  "scripts": {
-    "test": "./node_modules/.bin/mocha",
-    "prepack": "node_modules/.bin/rimraf ./dist && ./node_modules/.bin/tsc"
-  },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=16.0.0"
   },
   "author": "Jeremy Chone <jeremy.chone@gmail.com>",
-  "license": "MIT",
+  "license": "MIT",  
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/BriteSnow/node-sketchdev.git"
+  },
+  "keyword": [
+    "sketchapp",
+    "sketch",
+    "svg",
+    "symbols",
+    "sprite"
+  ],
   "bugs": {
     "url": "https://github.com/BriteSnow/node-sketchdev/issues"
   }

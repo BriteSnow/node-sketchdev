@@ -1,3 +1,4 @@
+import { pathExists } from 'fs-aux';
 import { asArray } from 'utils-min';
 import { Config, ImageOutput, Output } from './config.js';
 import { downloadOrigin } from './downloader.js';
@@ -6,7 +7,6 @@ import { exportStyles } from './export-style.js';
 import { sketchDoc, SketchDoc } from './sketch-doc.js';
 import { hasLogLevel, hasSketchApp, NamedError } from './utils.js';
 import { TOOL_PATH } from './vals.js';
-const { pathExists } = (await import('fs-extra')).default;
 
 export const ERROR_INPUT_NOT_FOUND = 'ERROR_INPUT_NOT_FOUND';
 

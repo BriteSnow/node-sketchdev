@@ -1,6 +1,7 @@
 import FileFormat from '@sketch-hq/sketch-file-format-ts';
 import * as cheerio from 'cheerio';
-import { glob, saferRemove } from 'fs-extra-plus';
+import { glob, saferRemove } from 'fs-aux';
+import { copyFile, mkdir, readFile } from 'fs/promises';
 import { spawn } from 'p-spawn';
 import * as Path from 'path';
 import { URL } from 'url'; // for dirname
@@ -9,7 +10,7 @@ import { match, processName, writeToFile, WriteType } from './utils.js';
 import { TOOL_PATH } from './vals.js';
 import { ZipFile } from './zip-file.js';
 
-const { readFile, copy, mkdirs } = (await import('fs-extra')).default;
+
 
 
 // Sketch Doc: https://developer.sketch.com/cli/
@@ -212,7 +213,7 @@ async function exportFn(svgFile: string, _opts: ExportArtboardsOptions) {
 
 				let to = Path.join(flattenDir, name + ".svg");
 
-				await copy(svgFile, to);
+				await copyFile(svgFile, to);
 			}
 		}
 
@@ -335,7 +336,7 @@ async function processSprite(svgDir: string, opts: { out: string }) {
 
 	const outInfo = Path.parse(opts.out);
 	// create the sprite folder
-	await mkdirs(outInfo.dir);
+	await mkdir(outInfo.dir, { recursive: true });
 
 	// write the sprite svg
 	const contentStr = content.join("\n");

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import chokidar from 'chokidar';
+import { pathExists } from 'fs-aux';
 import debounce from 'lodash.debounce';
 import minimist, { ParsedArgs } from 'minimist';
 import * as Path from 'path';
@@ -9,7 +10,6 @@ import { Config } from '../config.js';
 import { downloadOrigin } from '../downloader.js';
 import { ERROR_INPUT_NOT_FOUND, exec } from '../executor.js';
 import { hasLogLevel } from '../utils.js';
-const { pathExists, } = (await import('fs-extra')).default;
 
 
 const argv = minimist(process.argv.slice(2), { '--': true });

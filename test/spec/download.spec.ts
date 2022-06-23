@@ -1,4 +1,4 @@
-import { saferRemove } from 'fs-extra-plus';
+import { saferRemove } from 'fs-aux';
 import { downloadOrigin } from '../../src/downloader.js';
 import { getTestDir } from '../test-utils.js';
 
