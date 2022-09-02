@@ -6,7 +6,6 @@ import { getTestDir, TEST_SKETCH_FILE } from '../test-utils.js';
 
 describe('style', async function () {
 
-
 	it('style-simple', async function () {
 		const distDir = getTestDir(this.test?.title!);
 

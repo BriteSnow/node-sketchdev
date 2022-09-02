@@ -3,8 +3,9 @@ import { asArray } from 'utils-min';
 import { Config, ImageOutput, Output } from './config.js';
 import { downloadOrigin } from './downloader.js';
 import { exportColors } from './export-color.js';
+import { exportImages } from './export-image.js';
 import { exportStyles } from './export-style.js';
-import { sketchDoc, SketchDoc } from './sketch-doc.js';
+import { ExportArtboardsOptions, sketchDoc, SketchDoc } from './sketch-doc.js';
 import { hasLogLevel, hasSketchApp, NamedError } from './utils.js';
 import { TOOL_PATH } from './vals.js';
 
@@ -47,12 +48,19 @@ async function execImageOutput(doc: SketchDoc, output: ImageOutput) {
 
 	const format = type;
 
-
-	await doc.exportArtboards({
+	const opts: ExportArtboardsOptions = {
 		format,
 		out,
 		artboardName: artboard,
 		flatten
-	});
+	};
+
+	await exportImages(doc, opts);
+	// await doc.exportArtboards({
+	// 	format,
+	// 	out,
+	// 	artboardName: artboard,
+	// 	flatten
+	// });
 }
 
