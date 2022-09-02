@@ -7,7 +7,7 @@ import { getTestDir, TEST_SKETCH_FILE } from '../test-utils.js';
 describe('image', async function () {
 
 
-	it('image-ico-svg-sprite', async function () {
+	it('image-ico-sprite-svg', async function () {
 		const distDir = getTestDir(this.test?.title!);
 
 		await saferRemove(distDir);
@@ -17,6 +17,24 @@ describe('image', async function () {
 			output: {
 				type: 'svg',
 				out: distDir + 'sprite.svg',
+				artboard: /^ico\/.*/,
+				flatten: '-'
+			},
+			log: 'warning'
+		});
+
+	});
+
+	it('image-ico-sprite-ts', async function () {
+		const distDir = getTestDir(this.test?.title!);
+
+		await saferRemove(distDir);
+
+		await exec({
+			input: TEST_SKETCH_FILE,
+			output: {
+				type: 'svg',
+				out: distDir + 'sprite.ts',
 				artboard: /^ico\/.*/,
 				flatten: '-'
 			},
