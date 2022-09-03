@@ -9,6 +9,9 @@ import { ExportArtboardsOptions, SketchDoc } from './sketch-doc.js';
 import { processName, writeToFile, WriteType } from './utils.js';
 import { TOOL_PATH } from './vals.js';
 
+type Cheerio = cheerio.Cheerio;
+type Root = cheerio.Root;
+
 export async function exportImages(doc: SketchDoc, _opts: ExportArtboardsOptions) {
 
 	try {
@@ -102,7 +105,7 @@ function isFolderPath(v: string) {
 async function processSprite(svgDir: string, opts: { out: string }) {
 	const svgFiles = await glob(Path.join(svgDir, '/*.svg'));
 	const content = ['<svg xmlns="http://www.w3.org/2000/svg">'];
-	const symbols = [];
+	// const symbols = [];
 
 
 	for (let file of svgFiles) {
@@ -110,55 +113,14 @@ async function processSprite(svgDir: string, opts: { out: string }) {
 
 		let fileInfo = Path.parse(file);
 
-		let symbol: { name: string, viewBox?: string } = {
-			name: fileInfo.name
-		};
-
-
-		// get the src svg Doc
-		let srcDoc = cheerio.load(fileContent, cheerioXmlOpts);
-		let $srcSvg = srcDoc("svg");
-
-		// create the new symbol doc
-		let symbolDoc = cheerio.load("<symbol />", cheerioXmlOpts);
-		let $symbol = symbolDoc("symbol");
-
-		// set the id from the file name
-		$symbol.attr("id", symbol.name);
-
-		// get the same viewBox as the svg source element
-		let viewBox = $srcSvg.attr("viewBox");
-		if (viewBox) {
-			$symbol.attr("viewBox", viewBox);
-			symbol.viewBox = viewBox;
-		}
-
-		// append the first g element from the src element to the symbol
-		// note - can have multiple g, will be taken care of by cheerio, like jquery.
-		let $g = $srcSvg.children("g").clone();
-		$symbol.append($g);
-
-		// should have the same length
-		// Assume the clipPaths match 1-1 the g[clip-path], so no need to my by id/url
-		let $clipPaths = $srcSvg.find("defs > clipPath");
-		let $g_clips = $g.find("[clip-path]");
-
-		for (let i = 0; i < $clipPaths.length; i++) {
-			const $clipPath = cheerio($clipPaths.get(i))
-			const $g_clip = cheerio($g_clips.get(i));
-
-			$g_clip.empty()
-			$g_clip.removeAttr("clip-path");
-			$g_clip.append($clipPath.children())
-		}
-
-		console.log("-->> ", $g.length, $clipPaths.length, $g_clips.length, file);
-
-		// remove the fill attribute (since chrome has a bug that prevent it to override presentation attribute with css)
-		symbolDoc('[fill]').removeAttr("fill");
+		// let symbol: { name: string, viewBox?: string } = {
+		// 	name: fileInfo.name
+		// };
+		const symbolId = fileInfo.name;
+		const symbolDoc = symbolFromSvg(fileContent, symbolId);
 
 		content.push(symbolDoc.xml());
-		symbols.push(symbol);
+		// symbols.push(symbol);
 	}
 
 	content.push('</svg>');
@@ -190,6 +152,56 @@ ${contentStr}
 		await writeDemoFile('demo-css', 'template-demo.css', Path.join(outInfo.dir, "sprite-demo.css")); // for now, html hardcode to sprite-...
 	}
 
+}
+
+/** 
+ * Rudementary (sketchapp focused) svg doc with defs tags to a valid symbol tag. 
+ * Makes quite a bit of assumption on what seems to work with the way sketchapp export svg.
+ */
+function symbolFromSvg(svgFileContent: string, symbolId: string): Root {
+	// get the src svg Doc
+	let srcDoc = cheerio.load(svgFileContent, cheerioXmlOpts);
+	let $srcSvg = srcDoc("svg");
+
+	// create the new symbol doc
+	let symbolDoc = cheerio.load("<symbol />", cheerioXmlOpts);
+	let $symbol = symbolDoc("symbol");
+
+	// set the id from the file name
+	$symbol.attr("id", symbolId);
+
+	// get the same viewBox as the svg source element
+	let viewBox = $srcSvg.attr("viewBox");
+	if (viewBox) {
+		$symbol.attr("viewBox", viewBox);
+		// symbol.viewBox = viewBox;
+	}
+
+	// append the first g element from the src element to the symbol
+	// note - can have multiple g, will be taken care of by cheerio, like jquery.
+	let $g = $srcSvg.children("g").clone();
+	$symbol.append($g);
+
+	// should have the same length
+	// Assume the clipPaths match 1-1 the g[clip-path], so no need to my by id/url
+	let $clipPaths = $srcSvg.find("defs > clipPath");
+	let $g_clips = $g.find("[clip-path]");
+
+	for (let i = 0; i < $clipPaths.length; i++) {
+		const $clipPath = cheerio($clipPaths.get(i))
+		const $g_clip = cheerio($g_clips.get(i));
+
+		$g_clip.empty()
+		$g_clip.removeAttr("clip-path");
+		$g_clip.append($clipPath.children())
+	}
+
+	// console.log("-->> ", $g.length, $clipPaths.length, $g_clips.length, file);
+
+	// remove the fill attribute (since chrome has a bug that prevent it to override presentation attribute with css)
+	symbolDoc('[fill]').removeAttr("fill");
+
+	return symbolDoc;
 }
 
 async function writeDemoFile(writeType: WriteType, demoFile: string, distFile: string) {
