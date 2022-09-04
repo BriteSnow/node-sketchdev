@@ -9,7 +9,6 @@ import { ExportArtboardsOptions, SketchDoc } from './sketch-doc.js';
 import { processName, writeToFile, WriteType } from './utils.js';
 import { TOOL_PATH } from './vals.js';
 
-type Cheerio = cheerio.Cheerio;
 type Root = cheerio.Root;
 
 export async function exportImages(doc: SketchDoc, _opts: ExportArtboardsOptions) {

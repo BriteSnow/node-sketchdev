@@ -15,7 +15,7 @@
     "cheerio": "^1.0.0-rc.12",
     "chokidar": "^3.5.3",
     "follow-redirects": "^1.15.1",
-    "fs-aux": "^0.1.0",
+    "fs-aux": "^0.1.1",
     "lodash.debounce": "^4.0.8",
     "minimist": "^1.2.6",
     "p-spawn": "^0.5.5",
