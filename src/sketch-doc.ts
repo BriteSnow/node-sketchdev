@@ -60,7 +60,7 @@ export class SketchDoc {
 	async styles() {
 		const result: Style[] = [];
 
-		const document = await this.zipFile.loadJson('document.json') as FileFormat.Document;
+		const document = await this.zipFile.load_json('document.json') as FileFormat.Document;
 
 		const rawStyles = document.layerStyles?.objects;
 		if (rawStyles) {
@@ -91,7 +91,7 @@ export class SketchDoc {
 	async colors() {
 		const result: Color[] = [];
 
-		const document = await this.zipFile.loadJson('document.json') as FileFormat.Document;
+		const document = await this.zipFile.load_json('document.json') as FileFormat.Document;
 
 		const rawSwatches = document.sharedSwatches?.objects;
 		if (rawSwatches) {

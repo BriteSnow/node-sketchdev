@@ -1,3 +1,4 @@
+import * as fs from "fs";
 import { Readable } from 'stream';
 import yauzl, { ZipFile as YZip } from 'yauzl-promise';
 
@@ -10,10 +11,13 @@ export class ZipFile {
 		this.#file = file;
 	}
 
-	async loadJson(entryName: string) {
-		const yzip = await this.yZip();
+	async load_json(entryName: string) {
+		const yzip = await this.open_yzip();
 
-		const entry = (await yzip.readEntries()).find(e => e.fileName === 'document.json')!;
+		// NOTE: When we do the read_entries, it does consume the entries. 
+		let entries = await yzip.readEntries();
+		const entry = entries.find(e => e.filename === entryName)!;
+
 		const readStream = await yzip.openReadStream(entry);
 		const content = await streamToString(readStream);
 		const result = JSON.parse(content);
@@ -22,7 +26,7 @@ export class ZipFile {
 		return result;
 	}
 
-	private async yZip(): Promise<YZip> {
+	private async open_yzip(): Promise<YZip> {
 		return yauzl.open(this.#file);
 	}
 }

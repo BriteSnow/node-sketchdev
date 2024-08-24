@@ -1,5 +1,5 @@
 // import * as cheerio from 'cheerio';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import { glob, saferRemove } from 'fs-aux';
 import { copyFile, mkdir, readFile } from 'fs/promises';
 import { spawn } from 'p-spawn';
@@ -9,7 +9,7 @@ import { ExportArtboardsOptions, SketchDoc } from './sketch-doc.js';
 import { processName, writeToFile, WriteType } from './utils.js';
 import { TOOL_PATH } from './vals.js';
 
-type Root = cheerio.Root;
+// type Root = cheerio.Cheerio;
 
 export async function exportImages(doc: SketchDoc, _opts: ExportArtboardsOptions) {
 
@@ -157,7 +157,7 @@ ${contentStr}
  * Rudementary (sketchapp focused) svg doc with defs tags to a valid symbol tag. 
  * Makes quite a bit of assumption on what seems to work with the way sketchapp export svg.
  */
-function symbolFromSvg(svgFileContent: string, symbolId: string): Root {
+function symbolFromSvg(svgFileContent: string, symbolId: string): cheerio.CheerioAPI {
 	// get the src svg Doc
 	let srcDoc = cheerio.load(svgFileContent, cheerioXmlOpts);
 	let $srcSvg = srcDoc("svg");
@@ -187,15 +187,14 @@ function symbolFromSvg(svgFileContent: string, symbolId: string): Root {
 	let $g_clips = $g.find("[clip-path]");
 
 	for (let i = 0; i < $clipPaths.length; i++) {
-		const $clipPath = cheerio($clipPaths.get(i))
-		const $g_clip = cheerio($g_clips.get(i));
+		const $clipPath = cheerio.load($clipPaths.get(i)!)();
+		const $g_clip = cheerio.load($g_clips.get(i)!)();
 
-		$g_clip.empty()
+		$g_clip.empty();
 		$g_clip.removeAttr("clip-path");
 		$g_clip.append($clipPath.children())
 	}
 
-	// console.log("-->> ", $g.length, $clipPaths.length, $g_clips.length, file);
 
 	// remove the fill attribute (since chrome has a bug that prevent it to override presentation attribute with css)
 	symbolDoc('[fill]').removeAttr("fill");
